@@ -1,0 +1,17 @@
+﻿REGEDIT
+; 您的安裝程式會使用此 .REG 檔。
+; 如果無法使用安裝程式，會使用對 CWinApp::RegisterShellFileTypes 
+; 與 COleObjectFactory::UpdateRegistryAll 的呼叫，
+; 自動在您的 InitInstance 中登錄下列項目。
+
+
+HKEY_CLASSES_ROOT\MFC20191205.Application = MFC20191205 Application
+
+
+HKEY_CLASSES_ROOT\MFC20191205.Application\CLSID = {3a3acb96-e12a-4537-8b82-937e4f86ad2b}
+
+HKEY_CLASSES_ROOT\CLSID\{3a3acb96-e12a-4537-8b82-937e4f86ad2b} = MFC20191205 Application
+HKEY_CLASSES_ROOT\CLSID\{3a3acb96-e12a-4537-8b82-937e4f86ad2b}\ProgId = MFC20191205.Application
+
+
+HKEY_CLASSES_ROOT\CLSID\{3a3acb96-e12a-4537-8b82-937e4f86ad2b}\LocalServer32 = MFC20191205.EXE

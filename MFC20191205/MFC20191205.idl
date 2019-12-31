@@ -1,0 +1,29 @@
+﻿// MFC20191205.idl: MFC20191205.exe 的型別程式庫來源
+
+// 這個檔案會由 MIDL 編譯器處理以產生
+// 型別程式庫 (MFC20191205.tlb)。
+
+[ uuid(11132a8c-6c33-42ea-b49c-7d578a59eaf0), version(1.0) ]
+library MFC20191205
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	//  CMFC20191205Doc 的主要分派介面
+
+	[ uuid(737f7a32-b182-4536-a806-b169b2d88698) ]
+	dispinterface IMFC20191205
+	{
+		properties:
+
+		methods:
+	};
+
+	//  CMFC20191205Doc 的類別資訊
+
+	[ uuid(3a3acb96-e12a-4537-8b82-937e4f86ad2b) ]
+	coclass MFC20191205
+	{
+		[default] dispinterface IMFC20191205;
+	};
+};
