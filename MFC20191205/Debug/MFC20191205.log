@@ -1,0 +1,5 @@
+﻿  MFC20191205Dlg.cpp
+C:\Users\陳聖諺\source\repos\MFC20191205\MFC20191205\MFC20191205Dlg.cpp(371,7): warning C4101: 'szRegNum': 未參考的區域變數
+C:\Users\陳聖諺\source\repos\MFC20191205\MFC20191205\MFC20191205Dlg.cpp(1187,22): warning C4101: 'pBoxOne_Y': 未參考的區域變數
+C:\Users\陳聖諺\source\repos\MFC20191205\MFC20191205\MFC20191205Dlg.cpp(1187,35): warning C4101: 'pBoxOne_Z': 未參考的區域變數
+  MFC20191205.vcxproj -> C:\Users\陳聖諺\source\repos\MFC20191205\Debug\MFC20191205.exe
