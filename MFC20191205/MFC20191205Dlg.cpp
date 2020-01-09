@@ -47,10 +47,10 @@
 #define WIN32_LEAN_AND_MEAN
 #define DEFAULT_BUFLEN 32
 #define DEFAULT_PORT 8501
-#define DEFAULT_X 11790
+#define DEFAULT_X 51790
 #define DEFAULT_Y 42580
-#define DEFAULT_Z 13192
-#define DEFAULT_PZ 23820
+#define DEFAULT_Z 15792
+#define DEFAULT_PZ 26420
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -697,43 +697,98 @@ BOOL EthernetPort::ReadEthernetPort_non_overlapped(char* szString,int* nLengthRe
 	//AfxMessageBox(L"ReadEthernetPort successed!!", MB_YESNO | MB_ICONINFORMATION);
 	return TRUE;
 }
+
 ////////////////////////////////////////////////////////////////////////////
 //Class declarations for cam
+static void modifyCameragainRaw(ICameraPtr& cameraSptr, int64_t asdf)
+{
+
+
+	CDoubleNode nodegainRaw(cameraSptr, "GainRaw");
+	if (!nodegainRaw.isValid())
+	{
+		AfxMessageBox(L" get gainRaw node fail.", MB_YESNO | MB_ICONINFORMATION);
+		return;
+	}
+	double dbValue = 0.0;
+	if (false == nodegainRaw.getValue(dbValue))
+	{
+		AfxMessageBox(L" get gainRaw fail.", MB_YESNO | MB_ICONINFORMATION);
+		return;
+	}
+	 
+	if (false == nodegainRaw.setValue(dbValue + 0.5))
+		//if (false == nodeExposureTime.setValue(dbValue/2))
+	{
+		AfxMessageBox(L" set nodegainRaw fail.", MB_YESNO | MB_ICONINFORMATION);
+		return;
+	}
+
+	if (false == nodegainRaw.getValue(dbValue))
+	{
+		AfxMessageBox(L" get nodegainRaw fail.", MB_YESNO | MB_ICONINFORMATION);
+		return;
+	}
+}
+
+static void modifybrightness(ICameraPtr& cameraSptr)
+{
+
+	CIntNode nodebrightness(cameraSptr, "Brightness");
+	if (false == nodebrightness.isValid())
+	{
+		AfxMessageBox(L" get nodebrightness node fail.", MB_YESNO | MB_ICONINFORMATION);
+		return;
+	}
+	int64_t intValue = 0;
+	if (false == nodebrightness.getValue(intValue))
+	{
+		AfxMessageBox(L" get nodebrightness fail.", MB_YESNO | MB_ICONINFORMATION);
+		return;
+	}
+	 
+	if (false == nodebrightness.setValue(intValue + 10))
+		//if (false == nodeExposureTime.setValue(dbValue/2))
+	{
+		AfxMessageBox(L" set nodebrightness fail.", MB_YESNO | MB_ICONINFORMATION);
+		return;
+	}
+
+	if (false == nodebrightness.getValue(intValue))
+	{
+		AfxMessageBox(L" get nodebrightness fail.", MB_YESNO | MB_ICONINFORMATION);
+		return;
+	}
+}
+
 static void modifyCameraExposureTime(ICameraPtr& cameraSptr)
 {
 	Dahua::GenICam::CDoubleNode nodeExposureTime(cameraSptr, "ExposureTime");
 	if (!nodeExposureTime.isValid())
 	{
-		printf(" get ExposureTime node fail.\n");
+		AfxMessageBox(L" get ExposureTime node fail.", MB_YESNO | MB_ICONINFORMATION);
 		return;
 	}
 
 	double dbValue = 0.0;
 	if (false == nodeExposureTime.getValue(dbValue))
 	{
-		printf("get ExposureTime fail.\n");
+		AfxMessageBox(L" get ExposureTime fail.", MB_YESNO | MB_ICONINFORMATION);
 		return;
 	}
-	else
-	{
-		printf("before change ,ExposureTime is %f\n", dbValue);
-	}
 
-	if (false == nodeExposureTime.setValue(dbValue - 2))
+
+	if (false == nodeExposureTime.setValue(dbValue))
 		//if (false == nodeExposureTime.setValue(dbValue/2))
 	{
-		printf("set ExposureTime fail.\n");
+		AfxMessageBox(L" set ExposureTime fail.", MB_YESNO | MB_ICONINFORMATION);
 		return;
 	}
 
 	if (false == nodeExposureTime.getValue(dbValue))
 	{
-		printf("get ExposureTime fail.\n");
+		AfxMessageBox(L" get ExposureTime fail.", MB_YESNO | MB_ICONINFORMATION);
 		return;
-	}
-	else
-	{
-		printf("after change ,ExposureTime is %f\n", dbValue);
 	}
 }
 
@@ -822,6 +877,7 @@ static char* trim(char* pStr)
 	}
 	return pDst;
 }
+
 static int isInputValid(char* pInpuStr)
 {
 	char numChar;
@@ -879,16 +935,74 @@ static int selectDevice(int cameraCnt)
 	return 0;
 }
 
+//Set ExposureTime
+static bool LightsConditionInit(CStringT<wchar_t, StrTraitMFC<wchar_t>> cstr)
+{
+	Dahua::GenICam::CDoubleNode nodeExposureTime(cameraSptr, "ExposureTime");
+	if (!nodeExposureTime.isValid())
+	{
+		AfxMessageBox(L" get ExposureTime node fail.", MB_YESNO | MB_ICONINFORMATION);
+		return FALSE;
+	}
+	double XposureTime = _wtof(cstr);
+	if (false == nodeExposureTime.setValue(XposureTime))
+	{
+		AfxMessageBox(L" set ExposureTime fail.", MB_YESNO | MB_ICONINFORMATION);
+		return FALSE;
+	}
+
+	CIntNode nodebrightness(cameraSptr, "Brightness");
+	if (false == nodebrightness.isValid())
+	{
+		AfxMessageBox(L" get nodebrightness node fail.", MB_YESNO | MB_ICONINFORMATION);
+		return FALSE;
+	}
+	if (false == nodebrightness.setValue(40))
+	{
+		AfxMessageBox(L" set nodebrightness fail.", MB_YESNO | MB_ICONINFORMATION);
+		return FALSE;
+	}
+
+	CDoubleNode nodegainRaw(cameraSptr, "GainRaw");
+	if (!nodegainRaw.isValid())
+	{
+		AfxMessageBox(L" get gainRaw node fail.", MB_YESNO | MB_ICONINFORMATION);
+		return FALSE;
+		
+	}
+	if (false == nodegainRaw.setValue(15.0))
+		//if (false == nodeExposureTime.setValue(dbValue/2))
+	{
+		AfxMessageBox(L" set nodegainRaw fail.", MB_YESNO | MB_ICONINFORMATION);
+		return FALSE;
+		
+	}
+
+	//if (false == nodeExposureTime.getValue(dbValue))
+	//{
+	//	AfxMessageBox(L" get ExposureTime fail.", MB_YESNO | MB_ICONINFORMATION);
+	//	return;
+	//}
+	return TRUE;
+}
+
 static bool CreateThreadandGetImages(DWORD c, DWORD vx, DWORD vz, DWORD vpltz)
 {
 	//Create Thread開始串流
+	//goto astar if grabbing failed
+	modifyCameraExposureTime(cameraSptr);
+	//modifyCameragainAuto(cameraSptr);
+	//modifybrightness(cameraSptr);
+	astar:
 	IStreamSourcePtr streamPtr = systemObj.createStreamSource(cameraSptr);
 	bool isStartGrabbingSuccess = streamPtr->startGrabbing();
 	if (!isStartGrabbingSuccess)
 	{
 		AfxMessageBox(L"StartGrabbing  fail!!", MB_YESNO | MB_ICONINFORMATION);
-		return FALSE;
+		streamPtr->stopGrabbing();
+		goto astar;
 	}
+
 	Dahua::Memory::TSharedPtr<StreamRetrieve> streamThreadSptr(new StreamRetrieve(streamPtr));
 	if (NULL == streamThreadSptr.get())
 	{
@@ -929,6 +1043,9 @@ CMFC20191205Dlg::CMFC20191205Dlg(CWnd* pParent /*=nullptr*/)
 	, Z_Show(_T(""))
 	, plat_Z_show(_T(""))
 	, z_step(_T(""))
+
+	, exposure_time(0)
+	, Exposure_time(_T(""))
 {
 	EnableActiveAccessibility();
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -951,7 +1068,6 @@ void CMFC20191205Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT6, m_editctrl_v);
 
 	DDX_Control(pDX, IDC_EDIT5, Y_EDIT);
-
 	DDX_Text(pDX, IDC_EDIT2, Y_Show);
 	DDX_Control(pDX, IDC_EDIT3, Z_edit);
 	DDX_Text(pDX, IDC_EDIT4, Z_Show);
@@ -962,6 +1078,8 @@ void CMFC20191205Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK2, Stream_ONnOff);
 	DDX_Control(pDX, IDC_PICTURE, picpicpic);
 	DDX_Text(pDX, IDC_EDIT10, z_step);
+	DDX_Scroll(pDX, IDC_SCROLLBAR2, exposure_time);
+	DDX_Text(pDX, IDC_EDIT11, Exposure_time);
 }
 
 BEGIN_MESSAGE_MAP(CMFC20191205Dlg, CDialogEx)
@@ -978,9 +1096,7 @@ BEGIN_MESSAGE_MAP(CMFC20191205Dlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_COMBO2, &CMFC20191205Dlg::OnCbnSelchangeCombo2)
 	ON_EN_CHANGE(IDC_EDIT1, &CMFC20191205Dlg::OnEnChangeEdit1)
 	ON_EN_CHANGE(IDC_EDIT6, &CMFC20191205Dlg::OnEnChangeEdit6)
-
 	ON_EN_CHANGE(IDC_EDIT5, &CMFC20191205Dlg::OnEnChangeEdit5)
-
 	ON_EN_CHANGE(IDC_EDIT2, &CMFC20191205Dlg::OnEnChangeEdit2)
 	ON_EN_CHANGE(IDC_EDIT3, &CMFC20191205Dlg::OnEnChangeEdit3)
 	ON_EN_CHANGE(IDC_EDIT4, &CMFC20191205Dlg::OnEnChangeEdit4)
@@ -999,6 +1115,8 @@ BEGIN_MESSAGE_MAP(CMFC20191205Dlg, CDialogEx)
 	ON_STN_CLICKED(IDC_PICTURE, &CMFC20191205Dlg::OnStnClickedPicture)
 	ON_BN_CLICKED(IDC_BUTTON13, &CMFC20191205Dlg::OnBnClickedButton13)
 	ON_EN_CHANGE(IDC_EDIT10, &CMFC20191205Dlg::OnEnChangeEdit10)
+	ON_NOTIFY(NM_THEMECHANGED, IDC_SCROLLBAR2, &CMFC20191205Dlg::OnNMThemeChangedScrollbar2)
+	ON_EN_CHANGE(IDC_EDIT11, &CMFC20191205Dlg::OnEnChangeEdit11)
 END_MESSAGE_MAP()
 
 
@@ -1014,8 +1132,12 @@ BOOL CMFC20191205Dlg::OnInitDialog()
 	HWND hParent1 = ::GetParent(hWndl);//GetParent函式一個指定子視窗的父視窗控制代碼
 	::SetParent(hWndl, GetDlgItem(IDC_PICTURE)->m_hWnd);
 	::ShowWindow(hParent1, SW_HIDE);//ShowWindow指定視窗中顯示
+	//UpdateWindow();
 
-
+	
+	///////////
+	//((CScrollBar*)GetDlgItem(IDC_SCROLLBAR2))->SetScrollRange(0, 200000);
+	//((CScrollBar*)GetDlgItem(IDC_SCROLLBAR2))->SetScrollPos(100000);
 	
 	// 將 [關於...] 功能表加入系統功能表。
 	//((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(TRUE);
@@ -1137,7 +1259,7 @@ BOOL CMFC20191205Dlg::CanExit()
 	return TRUE;
 }
 
-////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 //介面功能區
 
 void CMFC20191205Dlg::OnBnClickedOk()
@@ -1145,21 +1267,21 @@ void CMFC20191205Dlg::OnBnClickedOk()
 	// TODO: 在此加入控制項告知處理常式程式碼
 	CDialogEx::OnOK();
 }
-
+//連線
 void CMFC20191205Dlg::OnBnClickedButton1()
 {
-	//連線
+	
 	//PlcAccess->OpenDevice(8501);
 	PlcAccess = new CKeyencePlcAccess;
 	PlcAccess->OpenDevice(DEFAULT_PORT);
-	
+
 }
 //氣壓缸上升
 void CMFC20191205Dlg::OnBnClickedButton2()
 {
 	//氣壓缸上升
 	PlcAccess->WriteRegister_MR_BIT(14, 1);
-	
+
 }
 //氣壓缸下降
 void CMFC20191205Dlg::OnBnClickedButton6()
@@ -1189,12 +1311,12 @@ void CMFC20191205Dlg::OnBnClickedButton7()
 	str2_y.Format((_T("%06d")), DEFAULT_Y);
 	str2_z.Format((_T("%06d")), DEFAULT_Z);
 	strplate_z.Format((_T("%06d")), DEFAULT_PZ);
-	
+
 	pBoxOne_X->SetWindowText(str2_x);
 	pBoxOne_Y->SetWindowText(str2_y);
 	pBoxOne_Z->SetWindowText(str2_z);
 	pPlateOne_Z->SetWindowText(strplate_z);
-	
+
 	//PlcAccess->WriteRegister_MR_BIT(7, 1);
 	//Lights_Toggle(1);
 
@@ -1209,20 +1331,17 @@ void CMFC20191205Dlg::OnBnClickedCheck1()
 		//WriteRegister_MR_BITTEST1(7, 1 , 7);
 		/*PlcAccess->WriteRegister_MR_BIT(7, 1);
 		Sleep(1000);*/
-		if (PlcAccess->WriteRegister_MR_BIT(7, 1) == TRUE)
-		{
-			((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(TRUE);
-			//AfxMessageBox(L"開燈斷點", MB_YESNO | MB_ICONINFORMATION);
-		}
-
+			PlcAccess->WriteRegister_MR_BIT(7, 1);
+		
 	}
-	else if (BST_UNCHECKED == ((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck())
+	if (BST_UNCHECKED == ((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck())
 	{
 		PlcAccess->WriteRegister_MR_BIT(7, 0);
 	}
-}
+	
 
-/////////////////////////////
+	
+}
 
 //前光三軸移動
 void CMFC20191205Dlg::OnBnClickedButton3()
@@ -1297,6 +1416,9 @@ void CMFC20191205Dlg::OnBnClickedButton3()
 				pBoxTwo_X->SetWindowText(str2_x);
 				pBoxTwo_Y->SetWindowText(str2_y);
 				pBoxTwo_Z->SetWindowText(str2_z);
+				pBoxTwo_X->UpdateWindow();
+				pBoxTwo_Y->UpdateWindow();
+				pBoxTwo_Z->UpdateWindow();
 
 				if ((str2_x == tmpt_x) && (str2_y == tmpt_y) && (str2_z == tmpt_z))
 				{
@@ -1309,6 +1431,7 @@ void CMFC20191205Dlg::OnBnClickedButton3()
 				Sleep(1000);
 			}
 			PlcAccess->WriteRegister_MR_BIT(101, 0);
+
 			//if (PlcAccess->WriteRegister_MR_BIT(101, 0)) //通知前光學3軸動完成 pc 寫0
 			//{
 			//	AfxMessageBox(L"前光學三軸移動完成請確認", MB_YESNO | MB_ICONINFORMATION);
@@ -1341,7 +1464,7 @@ void CMFC20191205Dlg::OnBnClickedButton4()
 
 	if (PlcAccess->WriteRegister_DM_WORD(12, tmp_z) == TRUE)   //載台Z軸移動座標寫入
 	{
-		AfxMessageBox(L"載台Z軸準備移動請確認", MB_YESNO | MB_ICONINFORMATION);
+		//AfxMessageBox(L"載台Z軸準備移動請確認", MB_YESNO | MB_ICONINFORMATION);
 
 		if (PlcAccess->WriteRegister_MR_BIT(3, 1) == TRUE) //載台Z軸移動
 		{
@@ -1353,7 +1476,8 @@ void CMFC20191205Dlg::OnBnClickedButton4()
 				str2_z.Format((_T("%06d")), valuepz);
 
 				pPlateTwo_Z->SetWindowText(str2_z);
-
+				pPlateTwo_Z->UpdateWindow();
+			
 				if ((str2_z == tmpt_z))
 				{
 					break;
@@ -1365,7 +1489,7 @@ void CMFC20191205Dlg::OnBnClickedButton4()
 			}
 			if (PlcAccess->WriteRegister_MR_BIT(103, 0)) //通知載台Z軸移動完成 
 			{
-				AfxMessageBox(L"載台Z軸移動完成請確認", MB_YESNO | MB_ICONINFORMATION);
+				//AfxMessageBox(L"載台Z軸移動完成請確認", MB_YESNO | MB_ICONINFORMATION);
 			}
 		}	
 	}
@@ -1406,6 +1530,9 @@ void CMFC20191205Dlg::OnBnClickedButton5()
 			pBoxTwo_X->SetWindowText(str2_x);
 			pBoxTwo_Y->SetWindowText(str2_y);
 			pBoxTwo_Z->SetWindowText(str2_z);
+			pBoxTwo_X->UpdateWindow();
+			pBoxTwo_Y->UpdateWindow();
+			pBoxTwo_Z->UpdateWindow();
 
 			if ((str2_x == tmpt_x) && (str2_y == tmpt_y) && (str2_z == tmpt_z))
 			{
@@ -1513,6 +1640,9 @@ void CMFC20191205Dlg::OnBnClickedButton8()
 					pBoxTwo_X->SetWindowText(str2_x);
 					pBoxTwo_Y->SetWindowText(str2_y);
 					pBoxTwo_Z->SetWindowText(str2_z);
+					pBoxTwo_X->UpdateWindow();
+					pBoxTwo_Y->UpdateWindow();
+					pBoxTwo_Z->UpdateWindow();
 
 					if ((str2_x == tmpt_x))    //移動完成
 					{
@@ -1534,7 +1664,6 @@ void CMFC20191205Dlg::OnBnClickedButton8()
 		AfxMessageBox(L"前光學三軸移動完成請確認", MB_YESNO | MB_ICONINFORMATION);
 	}
 }
-
 //相機連線
 void CMFC20191205Dlg::OnBnClickedButton9()
 {
@@ -1564,8 +1693,7 @@ void CMFC20191205Dlg::OnBnClickedButton9()
 		AfxMessageBox(L"Connection failed.\n", MB_YESNO | MB_ICONINFORMATION);
 	}
 }
-
-//////SUPER FUNCTION 
+//////存取移動X軸測試 
 void CMFC20191205Dlg::OnBnClickedButton10()
 {
 	CEdit* pBoxOne_X, * pBoxOne_Y, * pBoxOne_Z;
@@ -1650,10 +1778,12 @@ void CMFC20191205Dlg::OnBnClickedButton10()
 					str2_x.Format((_T("%06d")), valuex);		  //DWORD轉換為CSTRING
 					str2_y.Format((_T("%06d")), valuey);
 					str2_z.Format((_T("%06d")), valuez);
-
 					pBoxTwo_X->SetWindowText(str2_x);
 					pBoxTwo_Y->SetWindowText(str2_y);
 					pBoxTwo_Z->SetWindowText(str2_z);
+					pBoxTwo_X->UpdateWindow();
+					pBoxTwo_Y->UpdateWindow();
+					pBoxTwo_Z->UpdateWindow();
 					Sleep(500);//給予光學移動短暫移動時間 若完成便不會移動
 					if ((str2_x == tmpt_x))    //移動完成
 					{
@@ -1683,7 +1813,222 @@ void CMFC20191205Dlg::OnBnClickedButton10()
 	}
 
 }
-////////////////////////////////////////////////////
+//調整曝光時間按鈕
+void CMFC20191205Dlg::OnBnClickedButton12()
+{
+	CEdit* pBoxExposureTime;
+	pBoxExposureTime = (CEdit*)GetDlgItem(IDC_EDIT11);
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> cstr;//光學載台Z移動距離
+	pBoxExposureTime->GetWindowText(cstr);
+	LightsConditionInit(cstr);
+}
+//串流開關
+void CMFC20191205Dlg::OnBnClickedCheck2()
+{
+	// TODO: 在此加入控制項告知處理常式程式碼
+	IStreamSourcePtr streamPtr = systemObj.createStreamSource(cameraSptr);
+	bool isStartGrabbingSuccess = streamPtr->startGrabbing();
+	if (!isStartGrabbingSuccess)
+	{
+		AfxMessageBox(L"Stop Grabbing.", MB_YESNO | MB_ICONINFORMATION);
+	}
+
+	int frameCount = 0;
+	int j = 0;
+	Size dsize = Size(3072 * 0.625 * 0.9 * 0.5, 2048 * 0.5 * 0.9 * 0.5);
+	Mat image2;
+	//Mat m2(2048 * 0.5 * 0.9 * 0.5, 3072 * 0.625 * 0.9 * 0.5, CV_8UC1, Scalar(0, 0, 0));
+	image2 = Mat(dsize, CV_8U);
+	cv::Mat mat;
+
+	while (BST_CHECKED == ((CButton*)GetDlgItem(IDC_CHECK2))->GetCheck())
+	{
+		CFrame frame;
+
+		bool isSuccess = streamPtr->getFrame(frame, 100);
+		if (!isSuccess)
+		{
+			continue;
+		}
+		bool isValid = frame.valid();
+		if (!isValid)
+		{
+			continue;
+		}
+
+		uint32_t* JPEG;
+		JPEG = (uint32_t*)malloc(sizeof(uint32_t) * frame.getImageSize());
+		if (JPEG) {
+			memcpy(JPEG, frame.getImage(), frame.getImageSize());
+		}
+		mat = cv::Mat(frame.getImageHeight(), frame.getImageWidth(), CV_8UC1, JPEG);
+
+		//imshow approac one
+		cv::resize(mat, image2, dsize);
+		free(JPEG);
+		cv::imshow("view", image2);
+		cv::waitKey(30);
+		 
+	}
+	//AfxMessageBox(L"unchecked!", MB_YESNO | MB_ICONINFORMATION);
+	//streamPtr->stopGrabbing();
+}
+//chuck and camera z elevation
+void CMFC20191205Dlg::OnBnClickedButton13()
+{
+	//((CButton*)GetDlgItem(IDC_CHECK2))->SetCheck(FALSE);
+	// TODO: 在此加入控制項告知處理常式程式碼
+	CEdit* pBoxOne_X, * pBoxOne_Y, * pBoxOne_Z;
+	CEdit* pBoxTwo_X, * pBoxTwo_Y, * pBoxTwo_Z;
+	CEdit* pBoxTimes;
+	CEdit* pBoxDistance;
+	CEdit* pPlateOne_Z;
+	CEdit* pPlateTwo_Z;
+
+	//取得Z的變量
+	//pBoxOne_Z = (CEdit*)GetDlgItem(IDC_EDIT3);      //cameraz
+	//pPlateOne_Z = (CEdit*)GetDlgItem(IDC_EDIT7);    //chuckz
+	//光學載台移動的次數 距離
+	pBoxTimes = (CEdit*)GetDlgItem(IDC_EDIT9);
+	pBoxDistance = (CEdit*)GetDlgItem(IDC_EDIT10);
+	//光學現在的位置
+	pBoxTwo_X = (CEdit*)GetDlgItem(IDC_EDIT6);
+	pBoxTwo_Y = (CEdit*)GetDlgItem(IDC_EDIT2);
+	pBoxTwo_Z = (CEdit*)GetDlgItem(IDC_EDIT4);
+	//載台現在的位置
+	pPlateTwo_Z = (CEdit*)GetDlgItem(IDC_EDIT8);
+
+	//CStringT<wchar_t, StrTraitMFC<wchar_t>> str_z; //光學Z移動座標
+	//CStringT<wchar_t, StrTraitMFC<wchar_t>> strplt_z; //載台Z移動座標
+
+	//光學載台顯示座標使用
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> str2_x;
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> str2_y;
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> str2_z;
+	//CStringT<wchar_t, StrTraitMFC<wchar_t>> str2_y;
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> str2plt_z;
+
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> str3_z;//光學載台Z移動次數
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> str3d_z;//光學載台Z移動距離
+
+
+	//pBoxOne_Z->GetWindowText(str_z);    //光學z移動座標 存到str_z
+	//pPlateOne_Z->GetWindowText(strplt_z);//載台Z移動座標 存到strplt_z
+	pBoxTimes->GetWindowText(str3_z);  //移動的次數 存到str3_z
+	pBoxDistance->GetWindowText(str3d_z);  //移動的距離 存到str3d_z
+
+	//string到unsigned long int
+	//DWORD tmp_z = (DWORD)_wtoi(str_z);   //光學z移動座標 存到DWORD tmp_z
+	//DWORD tmpplt_z = (DWORD)_wtoi(strplt_z);//載台Z移動座標 存到DWORD tmpplt_z
+	DWORD times_z = (DWORD)_wtoi(str3_z);//光學載台移動的次數 存到DWORD times_z
+	DWORD distance_z = (DWORD)_wtoi(str3d_z);//光學載台移動的距離 存到DWORD distance_z
+	//目前的位置
+	DWORD start_z = PlcAccess->ReadRegister_DM_WORD(34);  //光學
+	DWORD startplt_z = PlcAccess->ReadRegister_DM_WORD(42); //載台
+	DWORD tmpz;
+	DWORD tmpplatez;
+
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> tmpt_z;
+	CStringT<wchar_t, StrTraitMFC<wchar_t>> tmptplt_z;
+
+	//開啟EXCEL
+	ofstream ExcelFile;
+	
+	ExcelFile.open("C:\\Users\\陳聖諺\\Desktop\\SoftwareExcel.csv");
+	//先預設成都是往上走 走完要回歸原點
+	double db = 0.0;
+	DWORD accu_compen = 0;
+	ExcelFile << "次數, 光學X, 光學Z, 載台Z" << endl;
+	for (DWORD counts = 0; counts < times_z; counts++)
+	{
+		DWORD compen_opt_z = 0;
+		
+		if (counts == 1 || counts == 5 || counts == 9 || counts == 12 || counts == 13)
+		{
+			compen_opt_z = 2;
+			accu_compen += compen_opt_z;
+		}
+		if (counts == 10 || counts == 11 || counts == 14)
+		{
+			compen_opt_z = 1;
+			accu_compen += compen_opt_z;
+		}
+		if (counts == 7 || counts == 8 || counts == 15)
+		{
+			compen_opt_z = -1;
+			accu_compen += compen_opt_z;
+		}
+			
+
+		//制定每次的目標座標
+		tmpz = start_z + distance_z * (counts + 1) + accu_compen;
+		//tmpz = start_z + distance_z * (counts + 1) ;
+		tmpplatez = startplt_z + distance_z * (counts + 1);
+
+		//開始讀取XZ並移動
+		if (PlcAccess->WriteRegister_DM_WORD(4, tmpz) && PlcAccess->WriteRegister_DM_WORD(12, tmpplatez)) //前光學 載台 Z軸改   
+		{
+			//AfxMessageBox(L"已讀取，準備移動", MB_YESNO | MB_ICONINFORMATION);
+
+			if (PlcAccess->WriteRegister_MR_BIT(1, 1) && PlcAccess->WriteRegister_MR_BIT(3, 1)) //前光學 載台z軸動 
+
+				PlcAccess->WriteRegister_MR_BIT(7, 1);
+			//Timer: update windowtext
+			tmpt_z = L"0";    //
+			tmptplt_z = L"0";    //
+			for (int timer = 0; timer < 64; timer++)
+			{
+
+				valuex = PlcAccess->ReadRegister_DM_WORD(30); //顯示前光學X
+				valuey = PlcAccess->ReadRegister_DM_WORD(32); //顯示前光學Y
+				valuez = PlcAccess->ReadRegister_DM_WORD(34); //顯示前光學Z
+				valuepltz = PlcAccess->ReadRegister_DM_WORD(42); //顯示載台Z
+				str2_x.Format((_T("%06d")), valuex);		  //DWORD轉換為CSTRING
+				str2_y.Format((_T("%06d")), valuey);
+				str2_z.Format((_T("%06d")), valuez);
+				str2plt_z.Format((_T("%06d")), valuepltz);
+
+				pBoxTwo_X->SetWindowText(str2_x);
+				pBoxTwo_Y->SetWindowText(str2_y);
+				pBoxTwo_Z->SetWindowText(str2_z);
+				pPlateTwo_Z->SetWindowText(str2plt_z);
+
+			/*	pBoxTwo_X->UpdateWindow();
+				pBoxTwo_Y->UpdateWindow();
+				pBoxTwo_Z->UpdateWindow();
+				pPlateTwo_Z->UpdateWindow();*/
+
+				Sleep(500);//給予短暫移動時間 若完成便不會移動
+				if ((str2_z == tmpt_z) && (str2plt_z == tmptplt_z))    //移動完成
+				{
+					break;
+				}
+				else
+				{
+					tmpt_z = str2_z;      //光學移動尚未完成
+					tmptplt_z = str2plt_z;//載台移動尚未完成
+
+					Sleep(500);//給予短暫移動時間 若完成便不會移動
+				}
+			}
+		}
+		//AfxMessageBox(L"移動暫停，存取影像...", MB_YESNO | MB_ICONINFORMATION);
+		//存影像 輸入資訊:第幾次 光學xz 載台z
+		CreateThreadandGetImages(counts, valuex, valuez, valuepltz);
+		//db += 1.0;
+		ExcelFile << counts << "," << valuex << "," << valuez << "," << valuepltz << endl;
+		//AfxMessageBox(L"存成功。", MB_YESNO | MB_ICONINFORMATION);
+	}
+	ExcelFile.close();
+	//完成
+	if (PlcAccess->WriteRegister_MR_BIT(101, 0) && PlcAccess->WriteRegister_MR_BIT(103, 0)) //通知前光學3軸動完成 pc 寫0
+	{
+		AfxMessageBox(L"光學載台Z軸移動完成請確認", MB_YESNO | MB_ICONINFORMATION);
+	}
+	//((CButton*)GetDlgItem(IDC_CHECK2))->SetCheck(TRUE);
+}
+
+//////////////////////////////////////////////////////////////////////////////////
 
 void CMFC20191205Dlg::OnCbnSelchangeCombo2()
 {
@@ -1740,196 +2085,32 @@ void CMFC20191205Dlg::OnEnChangeEdit9()
 	// TODO:  在此加入控制項告知處理常式程式碼
 }
 
-
-
-
-void CMFC20191205Dlg::OnBnClickedButton12()
-{
-
-}
-
-//串流開關
-void CMFC20191205Dlg::OnBnClickedCheck2()
-{
-	// TODO: 在此加入控制項告知處理常式程式碼
-	IStreamSourcePtr streamPtr = systemObj.createStreamSource(cameraSptr);
-	bool isStartGrabbingSuccess = streamPtr->startGrabbing();
-	if (!isStartGrabbingSuccess)
-	{
-		AfxMessageBox(L"Stop Grabbing.", MB_YESNO | MB_ICONINFORMATION);
-	}
-
-	int frameCount = 0;
-	int j = 0;
-	Size dsize = Size(3072 * 0.625 * 0.9 * 0.5, 2048 * 0.5 * 0.9 * 0.5);
-	Mat image2;
-	//Mat m2(2048 * 0.5 * 0.9 * 0.5, 3072 * 0.625 * 0.9 * 0.5, CV_8UC1, Scalar(0, 0, 0));
-	image2 = Mat(dsize, CV_8U);
-	cv::Mat mat;
-	while (BST_CHECKED == ((CButton*)GetDlgItem(IDC_CHECK2))->GetCheck())
-	{
-		CFrame frame;
-
-		bool isSuccess = streamPtr->getFrame(frame, 100);
-		if (!isSuccess)
-		{
-			continue;
-		}
-		bool isValid = frame.valid();
-		if (!isValid)
-		{
-			continue;
-		}
-
-		uint32_t* JPEG;
-		JPEG = (uint32_t*)malloc(sizeof(uint32_t) * frame.getImageSize());
-		if (JPEG) {
-			memcpy(JPEG, frame.getImage(), frame.getImageSize());
-		}
-		mat = cv::Mat(frame.getImageHeight(), frame.getImageWidth(), CV_8UC1, JPEG);
-
-		//imshow approac one
-		cv::resize(mat, image2, dsize);
-		free(JPEG);
-		cv::imshow("view", image2);
-		cv::waitKey(30);
-
-
-		///////////////////////save image
-		//string name = "Test_";
-		//string type = ".jpg";
-		//
-		//ss << name << (j + 1) << type;
-		//string filename = ss.str();
-		//ss.str("");
-		//imwrite("C:/Users/陳聖諺/Desktop/crop/" + filename, mat);
-	}
-}
-
-
 void CMFC20191205Dlg::OnStnClickedPicture()
 {
 	// TODO: 在此加入控制項告知處理常式程式碼
 }
 
-//chuck and camera z elevation
-void CMFC20191205Dlg::OnBnClickedButton13()
+void CMFC20191205Dlg::OnEnChangeEdit10()
 {
+	// TODO:  如果這是 RICHEDIT 控制項，控制項將不會
+	// 傳送此告知，除非您覆寫 CDialogEx::OnInitDialog()
+	// 函式和呼叫 CRichEditCtrl().SetEventMask()
+	// 讓具有 ENM_CHANGE 旗標 ORed 加入遮罩。
+
+	// TODO:  在此加入控制項告知處理常式程式碼
+}
+
+void CMFC20191205Dlg::OnNMThemeChangedScrollbar2(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	// 此功能需要 Windows XP 或更新的版本。
+	// 符號 _WIN32_WINNT 必須是 >= 0x0501。
 	// TODO: 在此加入控制項告知處理常式程式碼
-	CEdit* pBoxOne_X, * pBoxOne_Y, * pBoxOne_Z;
-	CEdit* pBoxTwo_X, * pBoxTwo_Y, * pBoxTwo_Z;
-	CEdit* pBoxTimes;
-	CEdit* pBoxDistance;
-	CEdit* pPlateOne_Z;
-	CEdit* pPlateTwo_Z;
+	*pResult = 0;
 
-	//取得Z的變量
-	//pBoxOne_Z = (CEdit*)GetDlgItem(IDC_EDIT3);      //cameraz
-	//pPlateOne_Z = (CEdit*)GetDlgItem(IDC_EDIT7);    //chuckz
-	//光學載台移動的次數 距離
-	pBoxTimes = (CEdit*)GetDlgItem(IDC_EDIT9);
-	pBoxDistance = (CEdit*)GetDlgItem(IDC_EDIT10);
-	//光學現在的位置
-	pBoxTwo_X = (CEdit*)GetDlgItem(IDC_EDIT6);
-	pBoxTwo_Y = (CEdit*)GetDlgItem(IDC_EDIT2);
-	pBoxTwo_Z = (CEdit*)GetDlgItem(IDC_EDIT4);
-	//載台現在的位置
-	pPlateTwo_Z = (CEdit*)GetDlgItem(IDC_EDIT8);;
-
-	//CStringT<wchar_t, StrTraitMFC<wchar_t>> str_z; //光學Z移動座標
-	//CStringT<wchar_t, StrTraitMFC<wchar_t>> strplt_z; //載台Z移動座標
-
-	//光學載台顯示座標使用
-	CStringT<wchar_t, StrTraitMFC<wchar_t>> str2_x;
-	CStringT<wchar_t, StrTraitMFC<wchar_t>> str2_y;
-	CStringT<wchar_t, StrTraitMFC<wchar_t>> str2_z;
-	//CStringT<wchar_t, StrTraitMFC<wchar_t>> str2_y;
-	CStringT<wchar_t, StrTraitMFC<wchar_t>> str2plt_z;
-
-	CStringT<wchar_t, StrTraitMFC<wchar_t>> str3_z;//光學載台Z移動次數
-	CStringT<wchar_t, StrTraitMFC<wchar_t>> str3d_z;//光學載台Z移動距離
-
-
-	//pBoxOne_Z->GetWindowText(str_z);    //光學z移動座標 存到str_z
-	//pPlateOne_Z->GetWindowText(strplt_z);//載台Z移動座標 存到strplt_z
-	pBoxTimes->GetWindowText(str3_z);  //移動的次數 存到str3_z
-	pBoxDistance->GetWindowText(str3d_z);  //移動的距離 存到str3d_z
-
-	//string到unsigned long int
-	//DWORD tmp_z = (DWORD)_wtoi(str_z);   //光學z移動座標 存到DWORD tmp_z
-	//DWORD tmpplt_z = (DWORD)_wtoi(strplt_z);//載台Z移動座標 存到DWORD tmpplt_z
-	DWORD times_z = (DWORD)_wtoi(str3_z);//光學載台移動的次數 存到DWORD times_z
-	DWORD distance_z = (DWORD)_wtoi(str3d_z);//光學載台移動的距離 存到DWORD distance_z
-	//目前的位置
-	DWORD start_z = PlcAccess->ReadRegister_DM_WORD(34);  //光學
-	DWORD startplt_z = PlcAccess->ReadRegister_DM_WORD(42); //載台
-	DWORD tmpz;
-	DWORD tmpplatez;
-
-	CStringT<wchar_t, StrTraitMFC<wchar_t>> tmpt_z;
-	CStringT<wchar_t, StrTraitMFC<wchar_t>> tmptplt_z;
-	//先預設成都是往上走 走完要回歸原點
-	for (DWORD counts = 0; counts < times_z; counts++)
-	{
-		//制定每次的目標座標
-		tmpz = start_z + distance_z * (counts + 1);
-		tmpplatez = startplt_z + distance_z * (counts + 1);
-
-		//開始讀取XZ並移動
-		if (PlcAccess->WriteRegister_DM_WORD(4, tmpz) && PlcAccess->WriteRegister_DM_WORD(12, tmpplatez)) //前光學 載台 Z軸改   
-		{
-			AfxMessageBox(L"已讀取，準備移動", MB_YESNO | MB_ICONINFORMATION);
-
-			if (PlcAccess->WriteRegister_MR_BIT(1, 1) && PlcAccess->WriteRegister_MR_BIT(3, 1)) //前光學 載台z軸動 
-
-				PlcAccess->WriteRegister_MR_BIT(7, 1);
-				//Timer: update windowtext
-				tmpt_z = L"0";    //
-				tmptplt_z = L"0";    //
-				for (int timer = 0; timer < 64; timer++)
-				{
-					valuex = PlcAccess->ReadRegister_DM_WORD(30); //顯示前光學X
-					valuey = PlcAccess->ReadRegister_DM_WORD(32); //顯示前光學Y
-					valuez = PlcAccess->ReadRegister_DM_WORD(34); //顯示前光學Z
-					valuepltz = PlcAccess->ReadRegister_DM_WORD(42); //顯示載台Z
-					str2_x.Format((_T("%06d")), valuex);		  //DWORD轉換為CSTRING
-					str2_y.Format((_T("%06d")), valuey);
-					str2_z.Format((_T("%06d")), valuez);
-					str2plt_z.Format((_T("%06d")), valuepltz);
-
-					pBoxTwo_X->SetWindowText(str2_x);
-					pBoxTwo_Y->SetWindowText(str2_y);
-					pBoxTwo_Z->SetWindowText(str2_z);
-					pPlateTwo_Z->SetWindowText(str2plt_z);
-					Sleep(500);//給予短暫移動時間 若完成便不會移動
-					if ((str2_z == tmpt_z) && (str2plt_z == tmptplt_z))    //移動完成
-					{
-						break;
-					}
-					else
-					{
-						tmpt_z = str2_z;      //光學移動尚未完成
-						tmptplt_z = str2plt_z;//載台移動尚未完成
-						Sleep(500);//給予短暫移動時間 若完成便不會移動
-					}	
-				}
-		}
-		//AfxMessageBox(L"移動暫停，存取影像...", MB_YESNO | MB_ICONINFORMATION);
-		//存影像 輸入資訊:第幾次 光學xz 載台z
-		CreateThreadandGetImages(counts, valuex, valuez, valuepltz);
-
-		AfxMessageBox(L"存成功。", MB_YESNO | MB_ICONINFORMATION);
-	}
-	//完成
-	if (PlcAccess->WriteRegister_MR_BIT(101, 0)) //通知前光學3軸動完成 pc 寫0
-	{
-		AfxMessageBox(L"光學載台Z軸移動完成請確認", MB_YESNO | MB_ICONINFORMATION);
-	}
 
 }
 
-
-void CMFC20191205Dlg::OnEnChangeEdit10()
+void CMFC20191205Dlg::OnEnChangeEdit11()
 {
 	// TODO:  如果這是 RICHEDIT 控制項，控制項將不會
 	// 傳送此告知，除非您覆寫 CDialogEx::OnInitDialog()

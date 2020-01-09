@@ -45,28 +45,22 @@ void StreamRetrieve::stop()
 	m_isLoop = false;
 	m_streamSptr.reset();
 }
-errno_t currentDateTime()
-{
-	time_t now = time(0);
-	char buf[32];
-	errno_t dt = ctime_s(buf , sizeof buf, &now);
-	
 
-	return dt;
-}
 void StreamRetrieve::threadProc()
 {
-	int frameCount = 0;
+
 	int j = 0;
-	CFrame frame;
-	
+
 	//cv::namedWindow("src1", cv::WINDOW_AUTOSIZE);
 	//cv::resizeWindow("camera", 1920 * 0.9 * 0.4, 1024 * 0.9 * 0.4);
 	//cv::namedWindow("camera", WINDOW_AUTOSIZE);//CV_WINDOW_NORMAL´N¬O0
 	while (m_isLoop)
 	{
-		
-
+		Mat mat;
+		string name = "ID_";
+		string type = ".jpg";
+		CFrame frame;
+		uint32_t* JPEG;
 		if (!m_streamSptr)
 		{
 			return;
@@ -87,21 +81,18 @@ void StreamRetrieve::threadProc()
 		////////////////////////////////////////////////////
 
 		///////////////////frame.getImage();
-		Mat mat;
-		string name = "ID_";
-		string type = ".jpg";
-		
-		uint32_t* JPEG;
+
 		JPEG = (uint32_t*)malloc(sizeof(uint32_t) * frame.getImageSize());
 		if (JPEG) {
 			memcpy(JPEG, frame.getImage(), frame.getImageSize());
 		}
 		mat = cv::Mat(frame.getImageHeight(), frame.getImageWidth(), CV_8UC1, JPEG);
-
-		ss<< currentDateTime << name << coordinatee << coordinatee1 << coordinatee2 << coordinatee3 <<type;
+		
+		ss << name << coordinatee<<"_" << coordinatee1 << "_" << coordinatee2 << "_" << coordinatee3 <<type;
 		string filename = ss.str();
 		ss.str("");
 		imwrite("C:/Users/³¯¸t¿Î/Desktop/crop/" + filename, mat);
+		
 		//cam flow
 		//Size dsize = Size(3072 * 0.625 * 0.9 * 0.4, 2048 * 0.5 * 0.9 * 0.4);
 		//Mat image2;
@@ -111,7 +102,8 @@ void StreamRetrieve::threadProc()
 		//cv::imshow("camera", image2);
 		//cv::waitKey(30);
 
-		j++;
+		//j++;
+		sleep(30);
 		free(JPEG);
 	}
 

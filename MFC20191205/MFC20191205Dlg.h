@@ -93,4 +93,9 @@ public:
 	afx_msg void OnBnClickedButton13();
 	CString z_step;
 	afx_msg void OnEnChangeEdit10();
+
+	int exposure_time;
+	afx_msg void OnNMThemeChangedScrollbar2(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnEnChangeEdit11();
+	CString Exposure_time;
 };
