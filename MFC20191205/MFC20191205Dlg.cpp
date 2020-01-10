@@ -986,7 +986,7 @@ static bool LightsConditionInit(CStringT<wchar_t, StrTraitMFC<wchar_t>> cstr)
 	return TRUE;
 }
 
-static bool CreateThreadandGetImages(DWORD c, DWORD vx, DWORD vz, DWORD vpltz)
+static bool CreateThreadandGetImages(DWORD c, DWORD vx, DWORD vz, DWORD vz1, DWORD vpltz)
 {
 	//Create Thread開始串流
 	//goto astar if grabbing failed
@@ -1009,7 +1009,7 @@ static bool CreateThreadandGetImages(DWORD c, DWORD vx, DWORD vz, DWORD vpltz)
 		AfxMessageBox(L"get thread FALSE!!", MB_YESNO | MB_ICONINFORMATION);
 		return FALSE;
 	}
-	streamThreadSptr->start(c,vx,vz,vpltz);   //m_loop = true    return createThread
+	streamThreadSptr->start(c,vx,vz, vz1,vpltz);   //m_loop = true    return createThread
 	CThread::sleep(500);     //1min streaming
 	streamThreadSptr->stop();
 	streamPtr->stopGrabbing();
@@ -1117,6 +1117,7 @@ BEGIN_MESSAGE_MAP(CMFC20191205Dlg, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT10, &CMFC20191205Dlg::OnEnChangeEdit10)
 	ON_NOTIFY(NM_THEMECHANGED, IDC_SCROLLBAR2, &CMFC20191205Dlg::OnNMThemeChangedScrollbar2)
 	ON_EN_CHANGE(IDC_EDIT11, &CMFC20191205Dlg::OnEnChangeEdit11)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -1188,6 +1189,14 @@ void CMFC20191205Dlg::OnSysCommand(UINT nID, LPARAM lParam)
 // 如果將最小化按鈕加入您的對話方塊，您需要下列的程式碼，
 // 以便繪製圖示。對於使用文件/檢視模式的 MFC 應用程式，
 // 框架會自動完成此作業。
+void CMFC20191205Dlg::OnSize(UINT nType, int cx, int cy)
+{
+	CDialogEx::OnSize(nType, cx, cy);
+
+	// TODO: 在此加入您的訊息處理常式程式碼
+
+
+}
 
 void CMFC20191205Dlg::OnPaint()
 {
@@ -1928,45 +1937,90 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 	DWORD tmpz;
 	DWORD tmpplatez;
 
+	DWORD compx;
+
 	CStringT<wchar_t, StrTraitMFC<wchar_t>> tmpt_z;
+
 	CStringT<wchar_t, StrTraitMFC<wchar_t>> tmptplt_z;
 
 	//開啟EXCEL
 	ofstream ExcelFile;
 	
-	ExcelFile.open("C:\\Users\\陳聖諺\\Desktop\\SoftwareExcel.csv");
+	ExcelFile.open("C:\\Users\\陳聖諺\\Desktop\\SoftwareExcel.csv", ofstream::out | ofstream::app);
 	//先預設成都是往上走 走完要回歸原點
 	double db = 0.0;
-	DWORD accu_compen = 0;
-	ExcelFile << "次數, 光學X, 光學Z, 載台Z" << endl;
+	DWORD accu_compen_z = 0;
+	DWORD accu_compen_x = 0;
+	ExcelFile << "次數, 補償的光學X, Before光學Z,After光學Z, 載台Z" << endl;
+	CreateThreadandGetImages(0, DEFAULT_X, DEFAULT_Z, DEFAULT_Z, DEFAULT_PZ);
+	//db += 1.0;
+	ExcelFile << 0 << "," << DEFAULT_X << "," << DEFAULT_Z << "," << DEFAULT_Z << "," << DEFAULT_PZ << endl;
 	for (DWORD counts = 0; counts < times_z; counts++)
 	{
+		//Z補償
 		DWORD compen_opt_z = 0;
-		
-		if (counts == 1 || counts == 5 || counts == 9 || counts == 12 || counts == 13)
+		if (counts == 1  || counts == 9 || counts == 12 || counts == 13)
 		{
 			compen_opt_z = 2;
-			accu_compen += compen_opt_z;
+			accu_compen_z += compen_opt_z;
 		}
-		if (counts == 10 || counts == 11 || counts == 14)
+		if (counts == 3 || counts == 5 || counts == 10 || counts == 11 || counts == 14)
 		{
 			compen_opt_z = 1;
-			accu_compen += compen_opt_z;
+			accu_compen_z += compen_opt_z;
 		}
 		if (counts == 7 || counts == 8 || counts == 15)
 		{
 			compen_opt_z = -1;
-			accu_compen += compen_opt_z;
+			accu_compen_z += compen_opt_z;
 		}
-			
 
+		//X補償表
+		DWORD compen_opt_x = 0;
+		if (counts == 10 )
+		{
+			compen_opt_x = 3;
+			accu_compen_x += compen_opt_x;
+		}
+		if (counts == 2 || counts == 9 || counts == 11 )
+		{
+			compen_opt_x = 1;
+			accu_compen_x += compen_opt_x;
+		}
+		if (counts == 3 || counts == 8 || counts == 18)
+		{
+			compen_opt_x = -1;
+			accu_compen_x += compen_opt_x;
+		}
+		if (counts == 6 || counts == 7)
+		{
+			compen_opt_z = -2;
+			accu_compen_x += compen_opt_z;
+		}
+		if (counts == 13 || counts == 14)
+		{
+			compen_opt_x = -3;
+			accu_compen_x += compen_opt_x;
+		}
+		if (counts == 4 || counts == 15 || counts == 16 || counts == 17)
+		{
+			compen_opt_x = -4;
+			accu_compen_x += compen_opt_x;
+		}
+		if (counts == 5)
+		{
+			compen_opt_x = -6;
+			accu_compen_x += compen_opt_x;
+		}
 		//制定每次的目標座標
-		tmpz = start_z + distance_z * (counts + 1) + accu_compen;
+		tmpz = start_z + distance_z * (counts + 1) + accu_compen_z;
 		//tmpz = start_z + distance_z * (counts + 1) ;
 		tmpplatez = startplt_z + distance_z * (counts + 1);
+		//x補償後的目標座標
+		compx = DEFAULT_X + accu_compen_x;
 
 		//開始讀取XZ並移動
-		if (PlcAccess->WriteRegister_DM_WORD(4, tmpz) && PlcAccess->WriteRegister_DM_WORD(12, tmpplatez)) //前光學 載台 Z軸改   
+		if (PlcAccess->WriteRegister_DM_WORD(0, compx) && PlcAccess->WriteRegister_DM_WORD(4, tmpz) && PlcAccess->WriteRegister_DM_WORD(12, tmpplatez)) //前光學 載台 Z軸改   前光學 X軸補償
 		{
 			//AfxMessageBox(L"已讀取，準備移動", MB_YESNO | MB_ICONINFORMATION);
 
@@ -2014,9 +2068,9 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 		}
 		//AfxMessageBox(L"移動暫停，存取影像...", MB_YESNO | MB_ICONINFORMATION);
 		//存影像 輸入資訊:第幾次 光學xz 載台z
-		CreateThreadandGetImages(counts, valuex, valuez, valuepltz);
+		CreateThreadandGetImages(counts+1, valuex, start_z + distance_z * (counts + 1), valuez,  valuepltz + distance_z * (counts + 1));
 		//db += 1.0;
-		ExcelFile << counts << "," << valuex << "," << valuez << "," << valuepltz << endl;
+		ExcelFile << counts << "," << valuex << "," << start_z + distance_z * (counts + 1) << "," << valuez << "," << valuepltz << endl;
 		//AfxMessageBox(L"存成功。", MB_YESNO | MB_ICONINFORMATION);
 	}
 	ExcelFile.close();
@@ -2119,3 +2173,6 @@ void CMFC20191205Dlg::OnEnChangeEdit11()
 
 	// TODO:  在此加入控制項告知處理常式程式碼
 }
+
+
+

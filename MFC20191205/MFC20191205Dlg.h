@@ -98,4 +98,5 @@ public:
 	afx_msg void OnNMThemeChangedScrollbar2(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnEnChangeEdit11();
 	CString Exposure_time;
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };

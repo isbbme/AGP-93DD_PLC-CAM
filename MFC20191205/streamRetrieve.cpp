@@ -29,13 +29,14 @@ StreamRetrieve::StreamRetrieve(IStreamSourcePtr& streamSptr)
 	
 }
 
-bool StreamRetrieve::start(DWORD c, DWORD vx, DWORD vz, DWORD vpltz)
+bool StreamRetrieve::start(DWORD c, DWORD vx, DWORD vz, DWORD vz1, DWORD vpltz)
 {
 	
 	coordinatee = c;
 	coordinatee1 = vx;
 	coordinatee2 = vz;
-	coordinatee3 = vpltz;
+	coordinatee3 = vz1;
+	coordinatee4 = vpltz;
 	m_isLoop = true;
 	return createThread();
 }
@@ -88,7 +89,7 @@ void StreamRetrieve::threadProc()
 		}
 		mat = cv::Mat(frame.getImageHeight(), frame.getImageWidth(), CV_8UC1, JPEG);
 		
-		ss << name << coordinatee<<"_" << coordinatee1 << "_" << coordinatee2 << "_" << coordinatee3 <<type;
+		ss << name << coordinatee<<"_" << coordinatee1 << "_" << coordinatee2 << "_" << coordinatee3 << coordinatee4 << type;
 		string filename = ss.str();
 		ss.str("");
 		imwrite("C:/Users/³¯¸t¿Î/Desktop/crop/" + filename, mat);
