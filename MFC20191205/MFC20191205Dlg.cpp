@@ -1128,9 +1128,9 @@ BOOL CMFC20191205Dlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 	///
 	////繫結視窗
-	namedWindow("view", WINDOW_AUTOSIZE);
-	HWND hWndl = (HWND)cvGetWindowHandle("view");//hWnd 表示視窗控制代碼,獲取視窗控制代碼
-	HWND hParent1 = ::GetParent(hWndl);//GetParent函式一個指定子視窗的父視窗控制代碼
+	namedWindow("view", WINDOW_AUTOSIZE);    //開啟視窗
+	HWND hWndl = (HWND)cvGetWindowHandle("view");//獲得"view"這一個window 的 WindowHandle hWnd1
+	HWND hParent1 = ::GetParent(hWndl);//GetParent函式一個指定子視窗的父視窗控制代碼 hParent1
 	::SetParent(hWndl, GetDlgItem(IDC_PICTURE)->m_hWnd);
 	::ShowWindow(hParent1, SW_HIDE);//ShowWindow指定視窗中顯示
 	//UpdateWindow();
@@ -1931,13 +1931,13 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 	//DWORD tmpplt_z = (DWORD)_wtoi(strplt_z);//載台Z移動座標 存到DWORD tmpplt_z
 	DWORD times_z = (DWORD)_wtoi(str3_z);//光學載台移動的次數 存到DWORD times_z
 	DWORD distance_z = (DWORD)_wtoi(str3d_z);//光學載台移動的距離 存到DWORD distance_z
-	//目前的位置
+	//起點的位置
 	DWORD start_z = PlcAccess->ReadRegister_DM_WORD(34);  //光學
 	DWORD startplt_z = PlcAccess->ReadRegister_DM_WORD(42); //載台
-	DWORD tmpz;
+
+	//DWORD tmpz;
 	DWORD tmpplatez;
 
-	DWORD compx;
 
 	CStringT<wchar_t, StrTraitMFC<wchar_t>> tmpt_z;
 
@@ -1949,78 +1949,266 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 	ExcelFile.open("C:\\Users\\陳聖諺\\Desktop\\SoftwareExcel.csv", ofstream::out | ofstream::app);
 	//先預設成都是往上走 走完要回歸原點
 	double db = 0.0;
-	DWORD accu_compen_z = 0;
-	DWORD accu_compen_x = 0;
+	DWORD deviation_z = 0;
 	ExcelFile << "次數, 補償的光學X, Before光學Z,After光學Z, 載台Z" << endl;
 	CreateThreadandGetImages(0, DEFAULT_X, DEFAULT_Z, DEFAULT_Z, DEFAULT_PZ);
 	//db += 1.0;
 	ExcelFile << 0 << "," << DEFAULT_X << "," << DEFAULT_Z << "," << DEFAULT_Z << "," << DEFAULT_PZ << endl;
 	for (DWORD counts = 0; counts < times_z; counts++)
 	{
-		//Z補償
-		DWORD compen_opt_z = 0;
-		if (counts == 1  || counts == 9 || counts == 12 || counts == 13)
+
+		//Z內插補法
+
+		////制定每次的目標座標  L+D 甜蜜點補法
+		//DWORD ID_Z = start_z + distance_z * (counts + 1);
+		//deviation_z = ID_Z;
+		//if (16292 < ID_Z && ID_Z <= 16792)
+		//{
+		//	deviation_z = ID_Z + 3;
+		//}
+		//if (16792 < ID_Z && ID_Z <= 17292)
+		//{
+		//	deviation_z = ID_Z + 2;
+		//}
+		//if (17292 < ID_Z && ID_Z <= 17792)
+		//{
+		//	deviation_z = ID_Z + 4;
+		//}
+		//if (17792 < ID_Z && ID_Z <= 18292)
+		//{
+		//	deviation_z = ID_Z + 5;
+		//}
+		//if (18292 < ID_Z && ID_Z <= 18792)
+		//{
+		//	deviation_z = ID_Z + 5;
+
+		//}
+		//if (18792 < ID_Z && ID_Z <= 19292)
+		//{
+		//	deviation_z = ID_Z + 5;
+		//}
+		//if (19292 < ID_Z && ID_Z <= 19792)
+		//{
+		//	deviation_z = ID_Z + 4;
+		//}
+		//if (19792 < ID_Z && ID_Z <= 20292)
+		//{
+		//	deviation_z = ID_Z + 4;
+		//}
+		//if (20292 < ID_Z && ID_Z <= 20792)
+		//{
+		//	deviation_z = ID_Z + 5;
+		//}
+		//if (20792 < ID_Z && ID_Z <= 21292)
+		//{
+		//	deviation_z = ID_Z + 6;
+		//}
+		//if (21292 < ID_Z && ID_Z <= 21792)
+		//{
+		//	deviation_z = ID_Z + 7;
+		//}
+		//if (21792 < ID_Z && ID_Z <= 22292)
+		//{
+		//	deviation_z = ID_Z + 10;
+		//}
+		//if (22292 < ID_Z && ID_Z <= 22792)
+		//{
+		//	deviation_z = ID_Z + 13;
+		//}
+		//if (22792 < ID_Z && ID_Z <= 23292)
+		//{
+		//	deviation_z = ID_Z + 12;
+		//}
+		//if (23292 < ID_Z && ID_Z <= 23792)
+		//{
+		//	deviation_z = ID_Z + 12;
+		//}
+		//if (23792 < ID_Z && ID_Z <= 24292)
+		//{
+		//	deviation_z = ID_Z + 12;
+		//}
+		//if (24292 < ID_Z && ID_Z <= 24792)
+		//{
+		//	deviation_z = ID_Z + 13;
+		//}
+		//if (24792 < ID_Z && ID_Z <= 25292)
+		//{
+		//	deviation_z = ID_Z + 14;
+		//}
+		//if (25292 < ID_Z && ID_Z <= 25792)
+		//{
+		//	deviation_z = ID_Z + 13;
+		//}
+		
+		//制定每次的目標座標  Light補法
+		DWORD ID_Z = start_z + distance_z * (counts + 1);
+		deviation_z = ID_Z;
+		if (16292 < ID_Z && ID_Z <= 16792)
 		{
-			compen_opt_z = 2;
-			accu_compen_z += compen_opt_z;
+			deviation_z = ID_Z + 3;
 		}
-		if (counts == 3 || counts == 5 || counts == 10 || counts == 11 || counts == 14)
+		if (16792 < ID_Z && ID_Z <= 17292)
 		{
-			compen_opt_z = 1;
-			accu_compen_z += compen_opt_z;
+			deviation_z = ID_Z + 3;
 		}
-		if (counts == 7 || counts == 8 || counts == 15)
+		if (17292 < ID_Z && ID_Z <= 17792)
 		{
-			compen_opt_z = -1;
-			accu_compen_z += compen_opt_z;
+			deviation_z = ID_Z + 4;
+		}
+		if (17792 < ID_Z && ID_Z <= 18292)
+		{
+			deviation_z = ID_Z + 4;
+		}
+		if (18292 < ID_Z && ID_Z <= 18792)
+		{
+			deviation_z = ID_Z + 5;
+
+		}
+		if (18792 < ID_Z && ID_Z <= 19292)
+		{
+			deviation_z = ID_Z + 4;
+		}
+		if (19292 < ID_Z && ID_Z <= 19792)
+		{
+			deviation_z = ID_Z + 3;
+		}
+		if (19792 < ID_Z && ID_Z <= 20292)
+		{
+			deviation_z = ID_Z + 3;
+		}
+		if (20292 < ID_Z && ID_Z <= 20792)
+		{
+			deviation_z = ID_Z + 5;
+		}
+		if (20792 < ID_Z && ID_Z <= 21292)
+		{
+			deviation_z = ID_Z + 6;
+		}
+		if (21292 < ID_Z && ID_Z <= 21792)
+		{
+			deviation_z = ID_Z + 7;
+		}
+		if (21792 < ID_Z && ID_Z <= 22292)
+		{
+			deviation_z = ID_Z + 9;
+		}
+		if (22292 < ID_Z && ID_Z <= 22792)
+		{
+			deviation_z = ID_Z + 12;
+		}
+		if (22792 < ID_Z && ID_Z <= 23292)
+		{
+			deviation_z = ID_Z + 13;
+		}
+		if (23292 < ID_Z && ID_Z <= 23792)
+		{
+			deviation_z = ID_Z + 12;
+		}
+		if (23792 < ID_Z && ID_Z <= 24292)
+		{
+			deviation_z = ID_Z + 12;
+		}
+		if (24292 < ID_Z && ID_Z <= 24792)
+		{
+			deviation_z = ID_Z + 13;
+		}
+		if (24792 < ID_Z && ID_Z <= 25292)
+		{
+			deviation_z = ID_Z + 14;
+		}
+		if (25292 < ID_Z && ID_Z <= 25792)
+		{
+			deviation_z = ID_Z + 13;
 		}
 
-		//X補償表
-		DWORD compen_opt_x = 0;
-		if (counts == 10 )
-		{
-			compen_opt_x = 3;
-			accu_compen_x += compen_opt_x;
-		}
-		if (counts == 2 || counts == 9 || counts == 11 )
-		{
-			compen_opt_x = 1;
-			accu_compen_x += compen_opt_x;
-		}
-		if (counts == 3 || counts == 8 || counts == 18)
-		{
-			compen_opt_x = -1;
-			accu_compen_x += compen_opt_x;
-		}
-		if (counts == 6 || counts == 7)
-		{
-			compen_opt_z = -2;
-			accu_compen_x += compen_opt_z;
-		}
-		if (counts == 13 || counts == 14)
-		{
-			compen_opt_x = -3;
-			accu_compen_x += compen_opt_x;
-		}
-		if (counts == 4 || counts == 15 || counts == 16 || counts == 17)
-		{
-			compen_opt_x = -4;
-			accu_compen_x += compen_opt_x;
-		}
-		if (counts == 5)
-		{
-			compen_opt_x = -6;
-			accu_compen_x += compen_opt_x;
-		}
-		//制定每次的目標座標
-		tmpz = start_z + distance_z * (counts + 1) + accu_compen_z;
+
 		//tmpz = start_z + distance_z * (counts + 1) ;
 		tmpplatez = startplt_z + distance_z * (counts + 1);
+
+		//X補償表
+	
+		//DWORD ID_Z = start_z + distance_z * (counts + 1);
+		DWORD compx = DEFAULT_X;
+		if (16792 < ID_Z && ID_Z <= 17292)
+		{
+			compx = DEFAULT_X + 1;
+		}
+		if (17292 < ID_Z && ID_Z <= 17792)
+		{
+			compx = DEFAULT_X - 1;
+		}
+		if (17792 < ID_Z && ID_Z <= 18292)
+		{
+			compx = DEFAULT_X -5;
+		}
+		if (18292 < ID_Z && ID_Z <= 18792)
+		{
+			compx = DEFAULT_X -13;
+			
+		}
+		if (18792 < ID_Z && ID_Z <= 19292)
+		{
+			compx = DEFAULT_X - 16;
+		}
+		if (19292 < ID_Z && ID_Z <= 19792)
+		{
+			compx = DEFAULT_X - 19;
+		}
+		if (19792 < ID_Z && ID_Z <= 20292)
+		{
+			compx = DEFAULT_X - 20;
+		}
+		if (20292 < ID_Z && ID_Z <= 20792)
+		{
+			compx = DEFAULT_X - 20;
+		}
+		if (20792 < ID_Z && ID_Z <= 21292)
+		{
+			compx = DEFAULT_X - 16;
+		}
+		if (21292 < ID_Z && ID_Z <= 21792)
+		{
+			compx = DEFAULT_X - 15;
+		}
+		if (21792 < ID_Z && ID_Z <= 22292)
+		{
+			compx = DEFAULT_X - 15;
+		}
+		if (22292 < ID_Z && ID_Z <= 22792)
+		{
+			compx = DEFAULT_X - 18;
+		}
+		if (22792 < ID_Z && ID_Z <= 23292)
+		{
+			compx = DEFAULT_X - 22;
+		}
+		if (23292 < ID_Z && ID_Z <= 23792)
+		{
+			compx = DEFAULT_X - 27;
+		}
+		if (23792 < ID_Z && ID_Z <= 24292)
+		{
+			compx = DEFAULT_X - 33;
+		}
+		if (24292 < ID_Z && ID_Z <= 24792)
+		{
+			compx = DEFAULT_X - 37;
+		}
+		if (24792 < ID_Z && ID_Z <= 25292)
+		{
+			compx = DEFAULT_X - 38;
+		}
+		if (25292 < ID_Z && ID_Z <= 25792)
+		{
+			compx = DEFAULT_X - 38;
+		}
+
+
 		//x補償後的目標座標
-		compx = DEFAULT_X + accu_compen_x;
+		//compx
 
 		//開始讀取XZ並移動
-		if (PlcAccess->WriteRegister_DM_WORD(0, compx) && PlcAccess->WriteRegister_DM_WORD(4, tmpz) && PlcAccess->WriteRegister_DM_WORD(12, tmpplatez)) //前光學 載台 Z軸改   前光學 X軸補償
+		if (PlcAccess->WriteRegister_DM_WORD(0, compx) && PlcAccess->WriteRegister_DM_WORD(4, deviation_z) && PlcAccess->WriteRegister_DM_WORD(12, tmpplatez)) //前光學 載台 Z軸改   前光學 X軸補償
 		{
 			//AfxMessageBox(L"已讀取，準備移動", MB_YESNO | MB_ICONINFORMATION);
 
@@ -2070,7 +2258,7 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 		//存影像 輸入資訊:第幾次 光學xz 載台z
 		CreateThreadandGetImages(counts+1, valuex, start_z + distance_z * (counts + 1), valuez,  valuepltz + distance_z * (counts + 1));
 		//db += 1.0;
-		ExcelFile << counts << "," << valuex << "," << start_z + distance_z * (counts + 1) << "," << valuez << "," << valuepltz << endl;
+		ExcelFile << counts+1 << "," << valuex << "," << start_z + distance_z * (counts + 1) << "," << valuez << "," << valuepltz << endl;
 		//AfxMessageBox(L"存成功。", MB_YESNO | MB_ICONINFORMATION);
 	}
 	ExcelFile.close();

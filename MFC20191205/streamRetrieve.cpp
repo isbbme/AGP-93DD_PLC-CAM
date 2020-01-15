@@ -89,7 +89,7 @@ void StreamRetrieve::threadProc()
 		}
 		mat = cv::Mat(frame.getImageHeight(), frame.getImageWidth(), CV_8UC1, JPEG);
 		
-		ss << name << coordinatee<<"_" << coordinatee1 << "_" << coordinatee2 << "_" << coordinatee3 << coordinatee4 << type;
+		ss << name << coordinatee<<"_" << coordinatee1 << "_" << coordinatee2 << "_" << coordinatee3 << "_" << coordinatee4 << type;
 		string filename = ss.str();
 		ss.str("");
 		imwrite("C:/Users/³¯¸t¿Î/Desktop/crop/" + filename, mat);
