@@ -2139,20 +2139,56 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 		}
 		if (17792 < ID_Z && ID_Z <= 18292)
 		{
-			compx = DEFAULT_X -5;
+			if (17792 < ID_Z && ID_Z <= 17917)
+				compx = DEFAULT_X -2;
+			if (17917 < ID_Z && ID_Z <= 18042)
+				compx = DEFAULT_X - 3;
+			if (18042 < ID_Z && ID_Z <= 18167)
+				compx = DEFAULT_X - 4;
+			if (18167 < ID_Z && ID_Z <= 18292)
+				compx = DEFAULT_X - 5;
+			//compx = DEFAULT_X - 5;
 		}
 		if (18292 < ID_Z && ID_Z <= 18792)
 		{
-			compx = DEFAULT_X -13;
+			if (18292 < ID_Z && ID_Z <= 18354.5)
+				compx = DEFAULT_X - 6;
+			if (18354.5 < ID_Z && ID_Z <= 18417)
+				compx = DEFAULT_X - 7;
+			if (18417 < ID_Z && ID_Z <= 18479.5)
+				compx = DEFAULT_X - 8;
+			if (18479.5 < ID_Z && ID_Z <= 18542)
+				compx = DEFAULT_X - 9;
+			if (18542 < ID_Z && ID_Z <= 18604.5)
+				compx = DEFAULT_X - 10;
+			if (18604.5 < ID_Z && ID_Z <= 18667)
+				compx = DEFAULT_X - 11;
+			if (18667 < ID_Z && ID_Z <= 18729.5)
+				compx = DEFAULT_X - 12;
+			if (18729.5 < ID_Z && ID_Z <= 18792)
+				compx = DEFAULT_X - 13;
+			//compx = DEFAULT_X -13;
 			
 		}
 		if (18792 < ID_Z && ID_Z <= 19292)
 		{
-			compx = DEFAULT_X - 16;
+			if (18792 < ID_Z && ID_Z <= 18958.7)
+				compx = DEFAULT_X - 14;
+			if (18958.7 < ID_Z && ID_Z <= 19125.3)
+				compx = DEFAULT_X - 15;
+			if (19125.3 < ID_Z && ID_Z <= 19292)
+				compx = DEFAULT_X - 16;
+			//compx = DEFAULT_X - 16;
 		}
 		if (19292 < ID_Z && ID_Z <= 19792)
 		{
-			compx = DEFAULT_X - 19;
+			if (19292 < ID_Z && ID_Z <= 19458.67)
+				compx = DEFAULT_X - 17;
+			if (19458.67 < ID_Z && ID_Z <= 19625.3)
+				compx = DEFAULT_X - 18;
+			if (19625.3 < ID_Z && ID_Z <= 19792)
+				compx = DEFAULT_X - 19;
+			//compx = DEFAULT_X - 19;
 		}
 		if (19792 < ID_Z && ID_Z <= 20292)
 		{
@@ -2164,7 +2200,15 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 		}
 		if (20792 < ID_Z && ID_Z <= 21292)
 		{
-			compx = DEFAULT_X - 16;
+			if (20792 < ID_Z && ID_Z <= 20917)
+				compx = DEFAULT_X - 19;
+			if (20917 < ID_Z && ID_Z <= 21042)
+				compx = DEFAULT_X - 18;
+			if (21042 < ID_Z && ID_Z <= 21167)
+				compx = DEFAULT_X - 17;
+			if (21167 < ID_Z && ID_Z <= 21292)
+				compx = DEFAULT_X - 16;
+			//compx = DEFAULT_X - 16;
 		}
 		if (21292 < ID_Z && ID_Z <= 21792)
 		{
@@ -2176,23 +2220,67 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 		}
 		if (22292 < ID_Z && ID_Z <= 22792)
 		{
-			compx = DEFAULT_X - 18;
+			if (22292 < ID_Z && ID_Z <= 22458.67)
+				compx = DEFAULT_X - 16;
+			if (22458.67 < ID_Z && ID_Z <= 22625.3)
+				compx = DEFAULT_X - 17;
+			if (22625.3 < ID_Z && ID_Z <= 22792)
+				compx = DEFAULT_X - 18;
+			//compx = DEFAULT_X - 18;
 		}
 		if (22792 < ID_Z && ID_Z <= 23292)
 		{
+			if (22792 < ID_Z && ID_Z <= 22917)
+				compx = DEFAULT_X - 19;
+			if (22917 < ID_Z && ID_Z <= 23042)
+				compx = DEFAULT_X - 20;
+			if (23042 < ID_Z && ID_Z <= 23167)
+				compx = DEFAULT_X - 21;
+			if (23167 < ID_Z && ID_Z <= 23292)
+				compx = DEFAULT_X - 22;
 			compx = DEFAULT_X - 22;
 		}
 		if (23292 < ID_Z && ID_Z <= 23792)
 		{
-			compx = DEFAULT_X - 27;
+			if (23292 < ID_Z && ID_Z <= 23392)
+				compx = DEFAULT_X - 23;
+			if (23392 < ID_Z && ID_Z <= 23492)
+				compx = DEFAULT_X - 24;
+			if (23492 < ID_Z && ID_Z <= 23592)
+				compx = DEFAULT_X - 25;
+			if (23592 < ID_Z && ID_Z <= 23692)
+				compx = DEFAULT_X - 26;
+			if (23692 < ID_Z && ID_Z <= 23792)
+				compx = DEFAULT_X - 27;
+			//compx = DEFAULT_X - 27;
 		}
 		if (23792 < ID_Z && ID_Z <= 24292)
 		{
-			compx = DEFAULT_X - 33;
+			if (23792 < ID_Z && ID_Z <= 23875.3)
+				compx = DEFAULT_X - 28;
+			if (23875.3 < ID_Z && ID_Z <= 23958.7)
+				compx = DEFAULT_X - 29;
+			if (23958.7 < ID_Z && ID_Z <= 24042)
+				compx = DEFAULT_X - 30;
+			if (24042 < ID_Z && ID_Z <= 24125.3)
+				compx = DEFAULT_X - 31;
+			if (24125.3 < ID_Z && ID_Z <= 24208.7)
+				compx = DEFAULT_X - 32;
+			if (24208.7 < ID_Z && ID_Z <= 24292)
+				compx = DEFAULT_X - 33;
+			//compx = DEFAULT_X - 33;
 		}
 		if (24292 < ID_Z && ID_Z <= 24792)
 		{
-			compx = DEFAULT_X - 37;
+			if (24292 < ID_Z && ID_Z <= 24417)
+				compx = DEFAULT_X - 34;
+			if (24417 < ID_Z && ID_Z <= 24542)
+				compx = DEFAULT_X - 35;
+			if (24542 < ID_Z && ID_Z <= 24667)
+				compx = DEFAULT_X - 36;
+			if (24667 < ID_Z && ID_Z <= 24792)
+				compx = DEFAULT_X - 37;
+			//compx = DEFAULT_X - 37;
 		}
 		if (24792 < ID_Z && ID_Z <= 25292)
 		{
