@@ -1956,7 +1956,6 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 	ExcelFile << 0 << "," << DEFAULT_X << "," << DEFAULT_Z << "," << DEFAULT_Z << "," << DEFAULT_PZ << endl;
 	for (DWORD counts = 0; counts < times_z; counts++)
 	{
-
 		//Z內插補法
 
 		////制定每次的目標座標  L+D 甜蜜點補法
@@ -2043,82 +2042,200 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 		//制定每次的目標座標  Light補法
 		DWORD ID_Z = start_z + distance_z * (counts + 1);
 		deviation_z = ID_Z;
+		if (15792 < ID_Z && ID_Z <= 16292)
+		{
+			deviation_z = ID_Z + 10 ;
+			if (16192 < ID_Z && ID_Z <= 16292)
+				deviation_z = ID_Z + 10 + 3;
+		}
 		if (16292 < ID_Z && ID_Z <= 16792)
 		{
-			deviation_z = ID_Z + 3;
+			deviation_z = ID_Z + 1 + 10 + 3;
+			if (16692 < ID_Z && ID_Z <= 16792)
+				deviation_z = ID_Z + 1 + 10 + 2;
+			
 		}
 		if (16792 < ID_Z && ID_Z <= 17292)
 		{
-			deviation_z = ID_Z + 3;
+			deviation_z = ID_Z + 2 + 10;
+			if (16792 < ID_Z && ID_Z <= 16892)
+				deviation_z = ID_Z + 2 + 10 + 1;
+			if (16892 < ID_Z && ID_Z <= 16992)
+				deviation_z = ID_Z + 2 + 10 + 1;
+			if (16992 < ID_Z && ID_Z <= 17092)
+				deviation_z = ID_Z + 2 + 10 + 1;
+			
 		}
 		if (17292 < ID_Z && ID_Z <= 17792)
 		{
-			deviation_z = ID_Z + 4;
+			deviation_z = ID_Z + 2 + 10;
+			if (17692 < ID_Z && ID_Z <= 17792)
+				deviation_z = ID_Z + 2 + 10 + 1;
 		}
 		if (17792 < ID_Z && ID_Z <= 18292)
 		{
-			deviation_z = ID_Z + 4;
+			deviation_z = ID_Z + 3 + 10;
+			if (17792 < ID_Z && ID_Z <= 17892)
+				deviation_z = ID_Z + 3 + 10 + 1;
+			if (17892 < ID_Z && ID_Z <= 17992)
+				deviation_z = ID_Z + 3 + 10 + 1;
+
+
 		}
+		///
 		if (18292 < ID_Z && ID_Z <= 18792)
 		{
-			deviation_z = ID_Z + 5;
+			if(18292 < ID_Z && ID_Z <= 18292 + 100)
+				deviation_z = ID_Z + 3 + 10 + 3;
+			if (18292 +100 < ID_Z && ID_Z <= 18292 + 200)
+				deviation_z = ID_Z + 3 + 10 + 2;
+			if (18292 +200 < ID_Z && ID_Z <= 18292 + 300)
+				deviation_z = ID_Z + 3 + 10 + 3;
+			if (18292 + 300 < ID_Z && ID_Z <= 18292 + 400)
+				deviation_z = ID_Z + 3 + 10 + 3;
+			if (18292 + 400 < ID_Z && ID_Z <= 18792)
+				deviation_z = ID_Z + 3 + 10 + 2;
 
 		}
 		if (18792 < ID_Z && ID_Z <= 19292)
 		{
-			deviation_z = ID_Z + 4;
+			deviation_z = ID_Z + 3 + 10;
+			if (18792 < ID_Z && ID_Z <= 18892)
+				deviation_z = ID_Z + 3 + 10 +1;
+			if (18892 < ID_Z && ID_Z <= 18992)
+				deviation_z = ID_Z + 3 + 10 + 5;
+			if (18992 < ID_Z && ID_Z <= 19092)
+				deviation_z = ID_Z + 3 + 10 + 2;
+			if (19092 < ID_Z && ID_Z <= 19192)
+				deviation_z = ID_Z + 3 + 10 + 2;
+			if (19192 < ID_Z && ID_Z <= 19292)
+				deviation_z = ID_Z + 3 + 10 + 2;
 		}
 		if (19292 < ID_Z && ID_Z <= 19792)
 		{
-			deviation_z = ID_Z + 3;
+			deviation_z = ID_Z + 2 + 10;
+			if (19292 < ID_Z && ID_Z <= 19392)
+				deviation_z = ID_Z + 2 + 10 + 3;
+			if (19392 < ID_Z && ID_Z <= 19492)
+				deviation_z = ID_Z + 2 + 10 + 1;
+			if (19492 < ID_Z && ID_Z <= 19592)
+				deviation_z = ID_Z + 2 + 10 + 2;
+			if (19592 < ID_Z && ID_Z <= 19692)
+				deviation_z = ID_Z + 2 + 10 + 3;
+			if (19692 < ID_Z && ID_Z <= 19792)
+				deviation_z = ID_Z + 2 + 10 + 2;
+
+			
 		}
 		if (19792 < ID_Z && ID_Z <= 20292)
 		{
-			deviation_z = ID_Z + 3;
+			deviation_z = ID_Z + 3 + 10;
+			if (19792 < ID_Z && ID_Z <= 19892)
+				deviation_z = ID_Z + 3 + 10 + 1 ;
+			if (20092 < ID_Z && ID_Z <= 20192)
+				deviation_z = ID_Z + 3 + 10 + 1;
+
 		}
 		if (20292 < ID_Z && ID_Z <= 20792)
 		{
-			deviation_z = ID_Z + 5;
+			deviation_z = ID_Z + 3 + 10;
+			if (20292 < ID_Z && ID_Z <= 20392)
+				deviation_z = ID_Z + 3 + 10 + 2;
+			if (20392 < ID_Z && ID_Z <= 20492)
+				deviation_z = ID_Z + 3 + 10 + 3;
+			if (20492 < ID_Z && ID_Z <= 20592)
+				deviation_z = ID_Z + 3 + 10 + 1;
+			if (20592 < ID_Z && ID_Z <= 20692)
+				deviation_z = ID_Z + 3 + 10 + 1;
+			if (20692 < ID_Z && ID_Z <= 20792)
+				deviation_z = ID_Z + 3 + 10 + 3;
 		}
 		if (20792 < ID_Z && ID_Z <= 21292)
 		{
-			deviation_z = ID_Z + 6;
+			deviation_z = ID_Z + 4 + 10;
+			if (20192 < ID_Z && ID_Z <= 21192)
+				deviation_z = ID_Z + 4 + 10 + 1;
 		}
 		if (21292 < ID_Z && ID_Z <= 21792)
 		{
-			deviation_z = ID_Z + 7;
+			deviation_z = ID_Z + 5 + 10;
 		}
 		if (21792 < ID_Z && ID_Z <= 22292)
 		{
-			deviation_z = ID_Z + 9;
+			deviation_z = ID_Z + 7 + 10;
 		}
 		if (22292 < ID_Z && ID_Z <= 22792)
 		{
-			deviation_z = ID_Z + 12;
+			deviation_z = ID_Z + 9 + 10;
+			if (22492 < ID_Z && ID_Z <= 22592)
+				deviation_z = ID_Z + 9 + 10 + 2;
+			if (22692 < ID_Z && ID_Z <= 22792)
+				deviation_z = ID_Z + 9 + 10 + 1;
 		}
 		if (22792 < ID_Z && ID_Z <= 23292)
 		{
-			deviation_z = ID_Z + 13;
+
+			deviation_z = ID_Z + 9 + 10;
+			if (22792 < ID_Z && ID_Z <= 22892)
+				deviation_z = ID_Z + 9 + 10 + 1;
+			if (22892 < ID_Z && ID_Z <= 22992)
+				deviation_z = ID_Z + 9 + 10 + 1;
+			if (23092 < ID_Z && ID_Z <= 23192)
+				deviation_z = ID_Z + 9 + 10 + 1;
+
 		}
 		if (23292 < ID_Z && ID_Z <= 23792)
 		{
-			deviation_z = ID_Z + 12;
+			deviation_z = ID_Z + 9 + 10;
+			if (23392 < ID_Z && ID_Z <= 23492)
+				deviation_z = ID_Z + 9 + 10 + 1;
+			if (23492 < ID_Z && ID_Z <= 23592)
+				deviation_z = ID_Z + 9 + 10 + 2;
 		}
 		if (23792 < ID_Z && ID_Z <= 24292)
 		{
-			deviation_z = ID_Z + 12;
+			deviation_z = ID_Z + 9 + 10 + 1;
+			if (23692 < ID_Z && ID_Z <= 23792)
+				deviation_z = ID_Z + 9 + 10 + 2;
 		}
 		if (24292 < ID_Z && ID_Z <= 24792)
 		{
-			deviation_z = ID_Z + 13;
+			if (24292 < ID_Z && ID_Z <= 24292+100)
+				deviation_z = ID_Z + 9 + 10 + 1 ;
+			if (24292+100 < ID_Z && ID_Z <= 24292 + 200)
+				deviation_z = ID_Z + 9 + 10 + 3;
+			if (24292+200 < ID_Z && ID_Z <= 24292 + 300)
+				deviation_z = ID_Z + 9 + 10 + 2;
+			if (24292+300 < ID_Z && ID_Z <= 24292 + 400)
+				deviation_z = ID_Z + 9 + 10 + 2;
+			if (24292+400 < ID_Z && ID_Z <= 24792)
+				deviation_z = ID_Z + 9 + 10 + 2;
 		}
 		if (24792 < ID_Z && ID_Z <= 25292)
 		{
-			deviation_z = ID_Z + 14;
+			if (24792 < ID_Z && ID_Z <= 24792 + 100)
+				deviation_z = ID_Z + 9 + 10 + 1;
+			if (24892 < ID_Z && ID_Z <= 24792 + 200)
+				deviation_z = ID_Z + 9 + 10 + 2;
+			if (24992 < ID_Z && ID_Z <= 24792 + 300)
+				deviation_z = ID_Z + 9 + 10 + 2;
+			if (25092 < ID_Z && ID_Z <= 24792 + 400)
+				deviation_z = ID_Z + 9 + 10 + 1;
+			if (25192 < ID_Z && ID_Z <= 25292)
+				deviation_z = ID_Z + 9 + 10 + 1;
+			
 		}
 		if (25292 < ID_Z && ID_Z <= 25792)
 		{
-			deviation_z = ID_Z + 13;
+			deviation_z = ID_Z + 9 + 10;
+			if (25292 < ID_Z && ID_Z <= 25392)
+				deviation_z = ID_Z + 9 + 10 + 1;
+			if (25392 < ID_Z && ID_Z <= 25492)
+				deviation_z = ID_Z + 9 + 10 +1;
+			if (25492 < ID_Z && ID_Z <= 25592)
+				deviation_z = ID_Z + 9 + 10 + 1;
+			if (25692 < ID_Z && ID_Z <= 25792)
+				deviation_z = ID_Z + 9 + 10 + 2;
 		}
 
 
@@ -2126,170 +2243,168 @@ void CMFC20191205Dlg::OnBnClickedButton13()
 		tmpplatez = startplt_z + distance_z * (counts + 1);
 
 		//X補償表
-	
-		//DWORD ID_Z = start_z + distance_z * (counts + 1);
 		DWORD compx = DEFAULT_X;
-		if (16792 < ID_Z && ID_Z <= 17292)
-		{
-			compx = DEFAULT_X + 1;
-		}
-		if (17292 < ID_Z && ID_Z <= 17792)
-		{
-			compx = DEFAULT_X - 1;
-		}
-		if (17792 < ID_Z && ID_Z <= 18292)
-		{
-			if (17792 < ID_Z && ID_Z <= 17917)
-				compx = DEFAULT_X -2;
-			if (17917 < ID_Z && ID_Z <= 18042)
-				compx = DEFAULT_X - 3;
-			if (18042 < ID_Z && ID_Z <= 18167)
-				compx = DEFAULT_X - 4;
-			if (18167 < ID_Z && ID_Z <= 18292)
-				compx = DEFAULT_X - 5;
-			//compx = DEFAULT_X - 5;
-		}
-		if (18292 < ID_Z && ID_Z <= 18792)
-		{
-			if (18292 < ID_Z && ID_Z <= 18354.5)
-				compx = DEFAULT_X - 6;
-			if (18354.5 < ID_Z && ID_Z <= 18417)
-				compx = DEFAULT_X - 7;
-			if (18417 < ID_Z && ID_Z <= 18479.5)
-				compx = DEFAULT_X - 8;
-			if (18479.5 < ID_Z && ID_Z <= 18542)
-				compx = DEFAULT_X - 9;
-			if (18542 < ID_Z && ID_Z <= 18604.5)
-				compx = DEFAULT_X - 10;
-			if (18604.5 < ID_Z && ID_Z <= 18667)
-				compx = DEFAULT_X - 11;
-			if (18667 < ID_Z && ID_Z <= 18729.5)
-				compx = DEFAULT_X - 12;
-			if (18729.5 < ID_Z && ID_Z <= 18792)
-				compx = DEFAULT_X - 13;
-			//compx = DEFAULT_X -13;
-			
-		}
-		if (18792 < ID_Z && ID_Z <= 19292)
-		{
-			if (18792 < ID_Z && ID_Z <= 18958.7)
-				compx = DEFAULT_X - 14;
-			if (18958.7 < ID_Z && ID_Z <= 19125.3)
-				compx = DEFAULT_X - 15;
-			if (19125.3 < ID_Z && ID_Z <= 19292)
-				compx = DEFAULT_X - 16;
-			//compx = DEFAULT_X - 16;
-		}
-		if (19292 < ID_Z && ID_Z <= 19792)
-		{
-			if (19292 < ID_Z && ID_Z <= 19458.67)
-				compx = DEFAULT_X - 17;
-			if (19458.67 < ID_Z && ID_Z <= 19625.3)
-				compx = DEFAULT_X - 18;
-			if (19625.3 < ID_Z && ID_Z <= 19792)
-				compx = DEFAULT_X - 19;
-			//compx = DEFAULT_X - 19;
-		}
-		if (19792 < ID_Z && ID_Z <= 20292)
-		{
-			compx = DEFAULT_X - 20;
-		}
-		if (20292 < ID_Z && ID_Z <= 20792)
-		{
-			compx = DEFAULT_X - 20;
-		}
-		if (20792 < ID_Z && ID_Z <= 21292)
-		{
-			if (20792 < ID_Z && ID_Z <= 20917)
-				compx = DEFAULT_X - 19;
-			if (20917 < ID_Z && ID_Z <= 21042)
-				compx = DEFAULT_X - 18;
-			if (21042 < ID_Z && ID_Z <= 21167)
-				compx = DEFAULT_X - 17;
-			if (21167 < ID_Z && ID_Z <= 21292)
-				compx = DEFAULT_X - 16;
-			//compx = DEFAULT_X - 16;
-		}
-		if (21292 < ID_Z && ID_Z <= 21792)
-		{
-			compx = DEFAULT_X - 15;
-		}
-		if (21792 < ID_Z && ID_Z <= 22292)
-		{
-			compx = DEFAULT_X - 15;
-		}
-		if (22292 < ID_Z && ID_Z <= 22792)
-		{
-			if (22292 < ID_Z && ID_Z <= 22458.67)
-				compx = DEFAULT_X - 16;
-			if (22458.67 < ID_Z && ID_Z <= 22625.3)
-				compx = DEFAULT_X - 17;
-			if (22625.3 < ID_Z && ID_Z <= 22792)
-				compx = DEFAULT_X - 18;
-			//compx = DEFAULT_X - 18;
-		}
-		if (22792 < ID_Z && ID_Z <= 23292)
-		{
-			if (22792 < ID_Z && ID_Z <= 22917)
-				compx = DEFAULT_X - 19;
-			if (22917 < ID_Z && ID_Z <= 23042)
-				compx = DEFAULT_X - 20;
-			if (23042 < ID_Z && ID_Z <= 23167)
-				compx = DEFAULT_X - 21;
-			if (23167 < ID_Z && ID_Z <= 23292)
-				compx = DEFAULT_X - 22;
-			compx = DEFAULT_X - 22;
-		}
-		if (23292 < ID_Z && ID_Z <= 23792)
-		{
-			if (23292 < ID_Z && ID_Z <= 23392)
-				compx = DEFAULT_X - 23;
-			if (23392 < ID_Z && ID_Z <= 23492)
-				compx = DEFAULT_X - 24;
-			if (23492 < ID_Z && ID_Z <= 23592)
-				compx = DEFAULT_X - 25;
-			if (23592 < ID_Z && ID_Z <= 23692)
-				compx = DEFAULT_X - 26;
-			if (23692 < ID_Z && ID_Z <= 23792)
-				compx = DEFAULT_X - 27;
-			//compx = DEFAULT_X - 27;
-		}
-		if (23792 < ID_Z && ID_Z <= 24292)
-		{
-			if (23792 < ID_Z && ID_Z <= 23875.3)
-				compx = DEFAULT_X - 28;
-			if (23875.3 < ID_Z && ID_Z <= 23958.7)
-				compx = DEFAULT_X - 29;
-			if (23958.7 < ID_Z && ID_Z <= 24042)
-				compx = DEFAULT_X - 30;
-			if (24042 < ID_Z && ID_Z <= 24125.3)
-				compx = DEFAULT_X - 31;
-			if (24125.3 < ID_Z && ID_Z <= 24208.7)
-				compx = DEFAULT_X - 32;
-			if (24208.7 < ID_Z && ID_Z <= 24292)
-				compx = DEFAULT_X - 33;
-			//compx = DEFAULT_X - 33;
-		}
-		if (24292 < ID_Z && ID_Z <= 24792)
-		{
-			if (24292 < ID_Z && ID_Z <= 24417)
-				compx = DEFAULT_X - 34;
-			if (24417 < ID_Z && ID_Z <= 24542)
-				compx = DEFAULT_X - 35;
-			if (24542 < ID_Z && ID_Z <= 24667)
-				compx = DEFAULT_X - 36;
-			if (24667 < ID_Z && ID_Z <= 24792)
-				compx = DEFAULT_X - 37;
-			//compx = DEFAULT_X - 37;
-		}
-		if (24792 < ID_Z && ID_Z <= 25292)
-		{
-			compx = DEFAULT_X - 38;
-		}
-		if (25292 < ID_Z && ID_Z <= 25792)
-		{
-			compx = DEFAULT_X - 38;
-		}
+		//if (16792 < ID_Z && ID_Z <= 17292)
+		//{
+		//	compx = DEFAULT_X + 1;
+		//}
+		//if (17292 < ID_Z && ID_Z <= 17792)
+		//{
+		//	compx = DEFAULT_X - 1;
+		//}
+		//if (17792 < ID_Z && ID_Z <= 18292)
+		//{
+		//	if (17792 < ID_Z && ID_Z <= 17917)
+		//		compx = DEFAULT_X -2;
+		//	if (17917 < ID_Z && ID_Z <= 18042)
+		//		compx = DEFAULT_X - 3;
+		//	if (18042 < ID_Z && ID_Z <= 18167)
+		//		compx = DEFAULT_X - 4;
+		//	if (18167 < ID_Z && ID_Z <= 18292)
+		//		compx = DEFAULT_X - 6;
+		//	//compx = DEFAULT_X - 5;
+		//}
+		//if (18292 < ID_Z && ID_Z <= 18792)
+		//{
+		//	if (18292 < ID_Z && ID_Z <= 18354.5)
+		//		compx = DEFAULT_X - 6;
+		//	if (18354.5 < ID_Z && ID_Z <= 18417)
+		//		compx = DEFAULT_X - 6;
+		//	if (18417 < ID_Z && ID_Z <= 18479.5)
+		//		compx = DEFAULT_X - 7;
+		//	if (18479.5 < ID_Z && ID_Z <= 18542)
+		//		compx = DEFAULT_X - 8;
+		//	if (18542 < ID_Z && ID_Z <= 18604.5)
+		//		compx = DEFAULT_X - 9;
+		//	if (18604.5 < ID_Z && ID_Z <= 18667)
+		//		compx = DEFAULT_X - 10;
+		//	if (18667 < ID_Z && ID_Z <= 18729.5)
+		//		compx = DEFAULT_X - 11;
+		//	if (18729.5 < ID_Z && ID_Z <= 18792)
+		//		compx = DEFAULT_X - 11;
+		//	//compx = DEFAULT_X -13;
+		//	
+		//}
+		//if (18792 < ID_Z && ID_Z <= 19292)
+		//{
+		//	if (18792 < ID_Z && ID_Z <= 18958.7)
+		//		compx = DEFAULT_X - 14;
+		//	if (18958.7 < ID_Z && ID_Z <= 19125.3)
+		//		compx = DEFAULT_X - 15;
+		//	if (19125.3 < ID_Z && ID_Z <= 19292)
+		//		compx = DEFAULT_X - 16;
+		//	//compx = DEFAULT_X - 16;
+		//}
+		//if (19292 < ID_Z && ID_Z <= 19792)
+		//{
+		//	if (19292 < ID_Z && ID_Z <= 19458.67)
+		//		compx = DEFAULT_X - 17;
+		//	if (19458.67 < ID_Z && ID_Z <= 19625.3)
+		//		compx = DEFAULT_X - 18;
+		//	if (19625.3 < ID_Z && ID_Z <= 19792)
+		//		compx = DEFAULT_X - 19;
+		//	//compx = DEFAULT_X - 19;
+		//}
+		//if (19792 < ID_Z && ID_Z <= 20292)
+		//{
+		//	compx = DEFAULT_X - 20;
+		//}
+		//if (20292 < ID_Z && ID_Z <= 20792)
+		//{
+		//	compx = DEFAULT_X - 18;
+		//}
+		//if (20792 < ID_Z && ID_Z <= 21292)
+		//{
+		//	if (20792 < ID_Z && ID_Z <= 20917)
+		//		compx = DEFAULT_X - 19;
+		//	if (20917 < ID_Z && ID_Z <= 21042)
+		//		compx = DEFAULT_X - 18;
+		//	if (21042 < ID_Z && ID_Z <= 21167)
+		//		compx = DEFAULT_X - 18;
+		//	if (21167 < ID_Z && ID_Z <= 21292)
+		//		compx = DEFAULT_X - 17;
+		//	//compx = DEFAULT_X - 16;
+		//}
+		//if (21292 < ID_Z && ID_Z <= 21792)
+		//{
+		//	compx = DEFAULT_X - 15;
+		//}
+		//if (21792 < ID_Z && ID_Z <= 22292)
+		//{
+		//	compx = DEFAULT_X - 15;
+		//}
+		//if (22292 < ID_Z && ID_Z <= 22792)
+		//{
+		//	if (22292 < ID_Z && ID_Z <= 22458.67)
+		//		compx = DEFAULT_X - 16;
+		//	if (22458.67 < ID_Z && ID_Z <= 22625.3)
+		//		compx = DEFAULT_X - 17;
+		//	if (22625.3 < ID_Z && ID_Z <= 22792)
+		//		compx = DEFAULT_X - 18;
+		//	//compx = DEFAULT_X - 18;
+		//}
+		//if (22792 < ID_Z && ID_Z <= 23292)
+		//{
+		//	if (22792 < ID_Z && ID_Z <= 22917)
+		//		compx = DEFAULT_X - 19 + 3;
+		//	if (22917 < ID_Z && ID_Z <= 23042)
+		//		compx = DEFAULT_X - 20 + 3;
+		//	if (23042 < ID_Z && ID_Z <= 23167)
+		//		compx = DEFAULT_X - 21 + 2;
+		//	if (23167 < ID_Z && ID_Z <= 23292)
+		//		compx = DEFAULT_X - 22 + 2;
+		//	compx = DEFAULT_X - 22;
+		//}
+		//if (23292 < ID_Z && ID_Z <= 23792)
+		//{
+		//	if (23292 < ID_Z && ID_Z <= 23392)
+		//		compx = DEFAULT_X - 23;
+		//	if (23392 < ID_Z && ID_Z <= 23492)
+		//		compx = DEFAULT_X - 24;
+		//	if (23492 < ID_Z && ID_Z <= 23592)
+		//		compx = DEFAULT_X - 25;
+		//	if (23592 < ID_Z && ID_Z <= 23692)
+		//		compx = DEFAULT_X - 26;
+		//	if (23692 < ID_Z && ID_Z <= 23792)
+		//		compx = DEFAULT_X - 27 + 2;
+		//	//compx = DEFAULT_X - 27;
+		//}
+		//if (23792 < ID_Z && ID_Z <= 24292)
+		//{
+		//	if (23792 < ID_Z && ID_Z <= 23875.3)
+		//		compx = DEFAULT_X - 27 + 2;
+		//	if (23875.3 < ID_Z && ID_Z <= 23958.7)
+		//		compx = DEFAULT_X - 27 + 2;
+		//	if (23958.7 < ID_Z && ID_Z <= 24042)
+		//		compx = DEFAULT_X - 27 + 1;
+		//	if (24042 < ID_Z && ID_Z <= 24125.3)
+		//		compx = DEFAULT_X - 27;
+		//	if (24125.3 < ID_Z && ID_Z <= 24208.7)
+		//		compx = DEFAULT_X - 27;
+		//	if (24208.7 < ID_Z && ID_Z <= 24292)
+		//		compx = DEFAULT_X - 28;
+		//	//compx = DEFAULT_X - 33;
+		//}
+		//if (24292 < ID_Z && ID_Z <= 24792)
+		//{
+		//	if (24292 < ID_Z && ID_Z <= 24417)
+		//		compx = DEFAULT_X - 29;
+		//	if (24417 < ID_Z && ID_Z <= 24542)
+		//		compx = DEFAULT_X - 30;
+		//	if (24542 < ID_Z && ID_Z <= 24667)
+		//		compx = DEFAULT_X - 31;
+		//	if (24667 < ID_Z && ID_Z <= 24792)
+		//		compx = DEFAULT_X - 32;
+		//	//compx = DEFAULT_X - 37;
+		//}
+		//if (24792 < ID_Z && ID_Z <= 25292)
+		//{
+		//	compx = DEFAULT_X - 33;
+		//}
+		//if (25292 < ID_Z && ID_Z <= 25792)
+		//{
+		//	compx = DEFAULT_X - 33;
+		//}
 
 
 		//x補償後的目標座標
